@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        app:showAsAction="always"
+        android:id="@+id/undo"
+        android:title="@string/undo" />
+    <item
+        app:showAsAction="always"
+        android:id="@+id/redo"
+        android:title="@string/redo" />
+    <item
+        android:icon="@drawable/ic_brush_black_24dp"
+        app:showAsAction="always"
+        android:id="@+id/brush"
+        android:title="@string/brush" />
+    <item
+        android:icon="@drawable/ic_backspace_black_24dp"
+        app:showAsAction="always"
+        android:id="@+id/eraser"
+        android:title="@string/eraser" />
+    <item
+        android:icon="@drawable/ic_fiber_manual_record_white_24dp"
+        app:showAsAction="ifRoom"
+        android:id="@+id/circle"
+        android:title="@string/circle" />
+    <item
+        android:icon="@drawable/ic_brush_black_24dp"
+        app:showAsAction="ifRoom"
+        android:id="@+id/ellipse"
+        android:title="@string/ellipse" />
+    <item
+        android:icon="@drawable/ic_backspace_black_24dp"
+        app:showAsAction="ifRoom"
+        android:id="@+id/rectangle"
+        android:title="@string/rectangle" />
+    <item
+        android:icon="@drawable/ic_fiber_manual_record_white_24dp"
+        app:showAsAction="ifRoom"
+        android:id="@+id/line"
+        android:title="@string/line" />
+    <item
+        android:id="@+id/background"
+        android:title="@string/background" />
+    <item
+        android:id="@+id/text"
+        android:title="@string/text" />
+</menu>

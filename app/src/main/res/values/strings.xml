@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Мазнуть</string>
+    <string name="brush">Мазок</string>
+    <string name="eraser">Ластег</string>
+    <string name="circle">Михаил</string>
+    <string name="rectangle">Мавзолей</string>
+    <string name="line">Линия партии</string>
+    <string name="ellipse">Недомихаил</string>
+    <string name="text">Написать на заборе</string>
+    <string name="background">Выбрать забор</string>
+    <string name="undo">Отменить</string>
+    <string name="redo">Вернуть</string>
+</resources>
