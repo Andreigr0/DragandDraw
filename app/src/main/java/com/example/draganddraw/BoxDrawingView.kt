@@ -7,7 +7,6 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import org.jetbrains.anko.sdk27.coroutines.onClick
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -28,6 +27,12 @@ data class Figure(
 
 
 class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(context, attrSet) {
+    interface DrawingCallback {
+        fun checkMenuAfterDrawing()
+    }
+
+    private val drawingCallback: DrawingCallback = context as DrawingCallback
+
     companion object {
         val BRUSH = 0
         val ERASER = 1
@@ -97,7 +102,7 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                     TEXT -> {
                     }
                 }
-
+                drawingCallback.checkMenuAfterDrawing()
             }
             MotionEvent.ACTION_MOVE -> {
                 when (currentTool) {
@@ -139,13 +144,9 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                 invalidate()
             }
             MotionEvent.ACTION_UP -> {
-//                copy.add(currentFigure)
                 copy.clear()
                 triggerUndo = true
                 invalidate()
-
-            }
-            MotionEvent.ACTION_CANCEL -> {
             }
         }
         return true
@@ -211,7 +212,8 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
         if (copy.size != 0 && copy.size != figures.size) {
             figures.add(copy[figures.size])
             invalidate()
-            return (copy.size < figures.size)
+            Log.i(TAG, "---- ${copy.size}, ${figures.size}")
+            return (copy.size > figures.size)
         }
         return false
     }

@@ -2,30 +2,33 @@ package com.example.draganddraw
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.MotionEvent
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
-import com.jakewharton.rxbinding2.view.RxView
-import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.isSelectable
-import org.jetbrains.anko.sdk27.coroutines.onClick
-import org.jetbrains.anko.sdk27.coroutines.onFocusChange
-import org.jetbrains.anko.sdk27.coroutines.onTouch
 import org.jetbrains.anko.toast
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), BoxDrawingView.DrawingCallback {
+
+    lateinit var menuUndo: MenuItem
+    lateinit var menuRedo: MenuItem
+    private val disabledAlpha = 100
+    private val enabledAlpha = 255
+
+    override fun checkMenuAfterDrawing() {
+        menuUndo.apply {
+            isEnabled = true
+            icon.alpha = enabledAlpha
+        }
+        menuRedo.apply {
+            isEnabled = false
+            icon.alpha = disabledAlpha
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,37 +44,56 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     if (boxdrawing.saveFile()) {
                         Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show()
-
                     }
                 }
             } else {
                 Toast.makeText(this, "Mmm", Toast.LENGTH_SHORT).show()
             }
         }
-      redo.elevation = 5f
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
+        menuUndo = menu?.findItem(R.id.undo)!!
+        menuRedo = menu.findItem(R.id.redo)!!
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        menu?.findItem(R.id.undo)?.isEnabled = boxdrawing.undo()
-        menu?.findItem(R.id.redo)?.isEnabled = boxdrawing.redo()
+        menu?.findItem(R.id.undo)?.apply {
+            isEnabled = false
+            icon.alpha = disabledAlpha
+        }
+        menu?.findItem(R.id.redo)?.apply {
+            isEnabled = false
+            icon.alpha = disabledAlpha
+        }
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.undo -> {
-                item.isEnabled = boxdrawing.undo()
-                invalidateOptionsMenu()
+                menuUndo.apply {
+                    isEnabled = boxdrawing.undo()
+                    if (!isEnabled)
+                        icon.alpha = disabledAlpha
+                }
+                menuRedo.apply {
+                    isEnabled = true
+                    icon.alpha = enabledAlpha
+                }
             }
             R.id.redo -> {
-                item.isEnabled = boxdrawing.redo()
-                invalidateOptionsMenu()
+                menuRedo.apply {
+                        isEnabled = boxdrawing.redo()
+                    if (!isEnabled)
+                        icon.alpha = disabledAlpha
+                    }
+                menuUndo.apply {
+                    isEnabled = true
+                    icon.alpha = enabledAlpha
+                }
             }
             R.id.brush -> {
                 BoxDrawingView.currentTool = BoxDrawingView.BRUSH
