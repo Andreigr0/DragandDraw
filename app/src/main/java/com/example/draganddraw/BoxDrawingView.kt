@@ -13,7 +13,6 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.random.Random
 
 val TAG = "BoxDrawing"
 
@@ -45,36 +44,46 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
         var currentTool = BRUSH
     }
 
+    var brushSize = 30f
+    var eraserSize = 50f
+    var addTextSize = 100f
+
+    var alp = 255
+    var red = 0
+    var green = 0
+    var blue = 0
+
+    private fun makePaint(alp: Int, red: Int, green: Int, blue: Int) = Paint().apply {
+        strokeWidth = brushSize
+        style = Paint.Style.STROKE
+        color = Color.argb(alp, red, green, blue)
+    }
+
     private val figures = ArrayList<Figure>()
     private val copy = ArrayList<Figure>()
     private var triggerUndo = true
     private lateinit var currentFigure: Figure
 
-    private val mBackgroundPaint = Paint().apply { color = Color.YELLOW }
+    private val mBackgroundPaint = Paint().apply { color = Color.WHITE }
 
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        Log.i(TAG, "View touch")
-
         val current = PointF(event.x, event.y)
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                val randPaint = Paint().apply { strokeWidth = 20f; textSize = 100f; style = Paint.Style.STROKE }
-                val r = Random
-                val c = Color.argb(r.nextInt(0, 256), r.nextInt(0, 256), r.nextInt(0, 256), r.nextInt(0, 256))
-                randPaint.color = c
+                val paint = makePaint(alp, red, green, blue)
 
                 when (currentTool) {
                     BRUSH -> {
                         val path = Path()
                         path.moveTo(current.x, current.y)
-                        currentFigure = Figure(current, BRUSH, randPaint, path)
+                        currentFigure = Figure(current, BRUSH, paint, path)
                         figures.add(currentFigure)
                     }
                     ERASER -> {
                         val eraserPaint = Paint().apply {
-                            color = mBackgroundPaint.color; style = Paint.Style.STROKE; strokeWidth = 100f
+                            color = mBackgroundPaint.color; style = Paint.Style.STROKE; strokeWidth = eraserSize
                         }
                         val path = Path()
                         path.moveTo(current.x, current.y)
@@ -82,19 +91,19 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                         figures.add(currentFigure)
                     }
                     CIRCLE -> {
-                        currentFigure = Figure(current, CIRCLE)
+                        currentFigure = Figure(current, CIRCLE, paint)
                         figures.add(currentFigure)
                     }
                     ELLIPSE -> {
-                        currentFigure = Figure(current, ELLIPSE, randPaint)
+                        currentFigure = Figure(current, ELLIPSE, paint)
                         figures.add(currentFigure)
                     }
                     RECTANGLE -> {
-                        currentFigure = Figure(current, RECTANGLE, randPaint)
+                        currentFigure = Figure(current, RECTANGLE, paint)
                         figures.add(currentFigure)
                     }
                     LINE -> {
-                        currentFigure = Figure(current, LINE, randPaint)
+                        currentFigure = Figure(current, LINE, paint)
                         figures.add(currentFigure)
                     }
                     BACKGROUND -> {
@@ -212,7 +221,6 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
         if (copy.size != 0 && copy.size != figures.size) {
             figures.add(copy[figures.size])
             invalidate()
-            Log.i(TAG, "---- ${copy.size}, ${figures.size}")
             return (copy.size > figures.size)
         }
         return false

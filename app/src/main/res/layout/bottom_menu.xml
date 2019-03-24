@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/brush_size"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <SeekBar
+            android:id="@+id/brush_size"
+            android:progress="120"
+            android:max="300"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="8" />
+
+        <EditText
+            android:id="@+id/brush_size_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="numberSigned"
+            android:text="120" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="19"
+            android:text="Выбор цвета"
+            android:textStyle="bold" />
+        <ImageView
+            android:id="@+id/brush_preview"
+            android:layout_weight="1"
+            android:src="#FFFF0000"
+            android:layout_width="35dp"
+            android:layout_height="35dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <TextView
+            android:text="@string/alpha"
+            android:layout_weight="1.65"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <SeekBar
+            android:id="@+id/alpha_value"
+            android:progress="255"
+            android:max="255"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="8" />
+
+        <EditText
+            android:id="@+id/alpha_value_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.1"
+            android:inputType="numberSigned"
+            android:text="255" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <TextView
+            android:text="@string/red"
+            android:layout_weight="1.65"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <SeekBar
+            android:id="@+id/red_value"
+            android:progress="255"
+            android:max="255"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="8" />
+
+        <EditText
+            android:id="@+id/red_value_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.1"
+            android:inputType="numberSigned"
+            android:text="255" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <TextView
+            android:text="@string/green"
+            android:layout_weight="1.65"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <SeekBar
+            android:id="@+id/green_value"
+            android:progress="255"
+            android:max="255"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="8" />
+
+        <EditText
+            android:id="@+id/green_value_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.1"
+            android:inputType="numberSigned"
+            android:text="255" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <TextView
+            android:text="@string/blue"
+            android:layout_weight="1.65"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <SeekBar
+            android:id="@+id/blue_value"
+            android:progress="255"
+            android:max="255"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="8" />
+
+        <EditText
+            android:id="@+id/blue_value_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.1"
+            android:inputType="numberSigned"
+            android:text="255" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/eraser_size"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <SeekBar
+            android:id="@+id/eraser_size"
+            android:progress="100"
+            android:max="300"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="8" />
+
+        <EditText
+            android:id="@+id/eraser_size_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="numberSigned"
+            android:text="100" />
+    </LinearLayout>
+
+</LinearLayout>

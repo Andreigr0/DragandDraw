@@ -10,4 +10,13 @@
     <string name="background">Выбрать забор</string>
     <string name="undo">Отменить</string>
     <string name="redo">Вернуть</string>
+    <string name="save">Сохранить</string>
+    <string name="size">Изменить размер</string>
+    <string name="adjust">Настройка</string>
+    <string name="brush_size">Размер кисти</string>
+    <string name="red">Красный</string>
+    <string name="alpha">Альфа</string>
+    <string name="blue">Синий</string>
+    <string name="green">Зелёный</string>
+    <string name="eraser_size">Размер ластика</string>
 </resources>
