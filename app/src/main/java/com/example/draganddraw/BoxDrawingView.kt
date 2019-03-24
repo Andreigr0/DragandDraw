@@ -44,9 +44,10 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
         var currentTool = BRUSH
     }
 
-    var brushSize = 30f
+    var brushSize = 50f
     var eraserSize = 50f
     var addTextSize = 100f
+    var paintBackgroundColor = Color.WHITE
 
     var alp = 255
     var red = 0
@@ -57,6 +58,18 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
         strokeWidth = brushSize
         style = Paint.Style.STROKE
         color = Color.argb(alp, red, green, blue)
+
+        isAntiAlias = true
+        isDither = true
+        xfermode = null
+    }
+
+    fun createNew(color: Int) {
+        figures.clear()
+        copy.clear()
+        paintBackgroundColor = color
+        invalidate()
+        Log.i(TAG, "color: $color, paintback: $paintBackgroundColor, paint: ${mBackgroundPaint.color}")
     }
 
     private val figures = ArrayList<Figure>()
@@ -64,18 +77,22 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
     private var triggerUndo = true
     private lateinit var currentFigure: Figure
 
-    private val mBackgroundPaint = Paint().apply { color = Color.WHITE }
+    private val mBackgroundPaint = Paint().apply { color = paintBackgroundColor }
 
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val current = PointF(event.x, event.y)
 
+        val paint = makePaint(alp, red, green, blue)
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                val paint = makePaint(alp, red, green, blue)
 
                 when (currentTool) {
                     BRUSH -> {
+                        paint.apply {
+                            strokeJoin = Paint.Join.ROUND
+                            strokeCap = Paint.Cap.ROUND
+                        }
                         val path = Path()
                         path.moveTo(current.x, current.y)
                         currentFigure = Figure(current, BRUSH, paint, path)
@@ -83,7 +100,11 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                     }
                     ERASER -> {
                         val eraserPaint = Paint().apply {
-                            color = mBackgroundPaint.color; style = Paint.Style.STROKE; strokeWidth = eraserSize
+                            color = paintBackgroundColor
+                            style = Paint.Style.STROKE
+                            strokeWidth = eraserSize
+                            strokeJoin = Paint.Join.ROUND
+                            strokeCap = Paint.Cap.ROUND
                         }
                         val path = Path()
                         path.moveTo(current.x, current.y)
@@ -153,6 +174,14 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                 invalidate()
             }
             MotionEvent.ACTION_UP -> {
+                when (currentTool) {
+                    BRUSH -> {
+                        val path = Path()
+                        path.moveTo(current.x, current.y)
+                        currentFigure = Figure(current, BRUSH, paint, path)
+                        figures.add(currentFigure)
+                    }
+                }
                 copy.clear()
                 triggerUndo = true
                 invalidate()
@@ -162,7 +191,9 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
     }
 
     override fun onDraw(canvas: Canvas) {
-        canvas.drawPaint(mBackgroundPaint)  // canvas.drawColor(Color.WHITE)
+//        canvas.drawPaint(mBackgroundPaint)  // canvas.drawColor(Color.WHITE)
+//        Log.i(TAG, "color: paintback: $paintBackgroundColor, paint: ${mBackgroundPaint.color}")
+        canvas.drawColor(paintBackgroundColor)
         for (figure in figures) {
             val left = Math.min(figure.origin.x, figure.current.x)
             val right = Math.max(figure.origin.x, figure.current.x)

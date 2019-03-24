@@ -1,22 +1,23 @@
 <resources>
-    <string name="app_name">Мазнуть</string>
-    <string name="brush">Мазок</string>
-    <string name="eraser">Ластег</string>
-    <string name="circle">Михаил</string>
-    <string name="rectangle">Мавзолей</string>
-    <string name="line">Линия партии</string>
-    <string name="ellipse">Недомихаил</string>
-    <string name="text">Написать на заборе</string>
-    <string name="background">Выбрать забор</string>
+    <string name="app_name">Рисовалка</string>
+    <string name="brush">Кисть</string>
+    <string name="eraser">Ластик</string>
+    <string name="circle">Круг</string>
+    <string name="rectangle">Прямоугольник</string>
+    <string name="line">Линия</string>
+    <string name="ellipse">Эллипс</string>
+    <string name="text">Текст</string>
+    <string name="background">Выбрать изображение</string>
     <string name="undo">Отменить</string>
     <string name="redo">Вернуть</string>
     <string name="save">Сохранить</string>
     <string name="size">Изменить размер</string>
-    <string name="adjust">Настройка</string>
+    <string name="adjust">Настройки кисти</string>
     <string name="brush_size">Размер кисти</string>
     <string name="red">Красный</string>
     <string name="alpha">Альфа</string>
     <string name="blue">Синий</string>
     <string name="green">Зелёный</string>
     <string name="eraser_size">Размер ластика</string>
+    <string name="create">Создать</string>
 </resources>

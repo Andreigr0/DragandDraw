@@ -54,7 +54,7 @@
                     android:gravity="center"
                     android:text="@string/undo"
                     android:textColor="@color/design_default_color_background"
-                    android:textSize="14sp" />
+                    android:textSize="10sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -83,11 +83,11 @@
                     android:gravity="center"
                     android:text="@string/redo"
                     android:textColor="@color/design_default_color_background"
-                    android:textSize="14sp" />
+                    android:textSize="10sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/button_adjust"
+                android:id="@+id/button_new"
                 android:layout_width="@dimen/bottom_menu_item_size"
                 android:layout_height="@dimen/bottom_menu_item_size"
                 android:background="?android:attr/selectableItemBackground"
@@ -101,7 +101,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_adjust" />
+                    android:src="@drawable/ic_create" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -109,11 +109,10 @@
                     android:layout_gravity="center"
                     android:layout_weight="3"
                     android:gravity="center"
-                    android:text="@string/adjust"
+                    android:text="@string/create"
                     android:textColor="@color/design_default_color_background"
-                    android:textSize="14sp" />
+                    android:textSize="10sp" />
             </LinearLayout>
-
 
             <LinearLayout
                 android:id="@+id/button_save"
@@ -140,7 +139,36 @@
                     android:gravity="center"
                     android:text="@string/save"
                     android:textColor="@color/design_default_color_background"
-                    android:textSize="14sp" />
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/button_adjust"
+                android:layout_width="@dimen/bottom_menu_item_size"
+                android:layout_height="@dimen/bottom_menu_item_size"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_adjust" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:text="@string/adjust"
+                    android:textColor="@color/design_default_color_background"
+                    android:textSize="10sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -312,34 +340,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/button_background"
-                android:layout_width="@dimen/bottom_menu_item_size"
-                android:layout_height="@dimen/bottom_menu_item_size"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="4dp">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_picture" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="@string/background"
-                    android:textColor="@color/design_default_color_background"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/button_text"
                 android:layout_width="@dimen/bottom_menu_item_size"
                 android:layout_height="@dimen/bottom_menu_item_size"
@@ -394,6 +394,35 @@
                     android:textColor="@color/design_default_color_background"
                     android:textSize="14sp" />
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/button_background"
+                android:layout_width="@dimen/bottom_menu_item_size"
+                android:layout_height="@dimen/bottom_menu_item_size"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_picture" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:text="@string/background"
+                    android:textColor="@color/design_default_color_background"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
         </LinearLayout>
     </HorizontalScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

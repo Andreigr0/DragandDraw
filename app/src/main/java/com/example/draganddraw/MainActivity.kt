@@ -2,12 +2,10 @@ package com.example.draganddraw
 
 import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +20,6 @@ import kotlinx.android.synthetic.main.bottom_menu.*
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.sdk27.coroutines.onSeekBarChangeListener
-import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.toast
 
 class BottomMenu : BottomSheetDialogFragment() {
@@ -204,6 +201,13 @@ class MainActivity : AppCompatActivity(), BoxDrawingView.DrawingCallback, Bottom
                 button_undo.isEnabled = true
                 icon_undo.imageAlpha = enabledAlpha
             }
+        }
+        button_new.onClick {
+            boxdrawing.createNew(Color.YELLOW)
+            button_undo.isEnabled = false
+            button_redo.isEnabled = false
+            icon_undo.imageAlpha = disabledAlpha
+            icon_redo.imageAlpha = disabledAlpha
         }
         button_adjust.onClick {
             val bottomMenu = BottomMenu()
