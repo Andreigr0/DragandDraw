@@ -15,6 +15,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 val TAG = "BoxDrawing"
+// Andrey
 
 data class Figure(
     val origin: PointF, val type: Int = 0, var prefs: Paint = Paint().apply {
