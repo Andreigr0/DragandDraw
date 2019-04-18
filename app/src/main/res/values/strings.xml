@@ -7,7 +7,7 @@
     <string name="line">Линия</string>
     <string name="ellipse">Эллипс</string>
     <string name="text">Текст</string>
-    <string name="background">Выбрать изображение</string>
+    <string name="background">Открыть</string>
     <string name="undo">Отменить</string>
     <string name="redo">Вернуть</string>
     <string name="save">Сохранить</string>
@@ -15,9 +15,9 @@
     <string name="adjust">Настройки кисти</string>
     <string name="brush_size">Размер кисти</string>
     <string name="red">Красный</string>
-    <string name="alpha">Альфа</string>
+    <string name="alpha">Прозрачность</string>
     <string name="blue">Синий</string>
     <string name="green">Зелёный</string>
     <string name="eraser_size">Размер ластика</string>
-    <string name="create">Создать</string>
+    <string name="create">Новое</string>
 </resources>

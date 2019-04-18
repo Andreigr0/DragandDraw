@@ -23,7 +23,6 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/circle"
-        android:icon="@drawable/ic_fiber_manual_record_white_24dp"
         android:title="@string/circle"
         app:showAsAction="ifRoom" />
     <item
@@ -33,12 +32,10 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/rectangle"
-        android:icon="@drawable/ic_backspace_black_24dp"
         android:title="@string/rectangle"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/line"
-        android:icon="@drawable/ic_fiber_manual_record_white_24dp"
         android:title="@string/line"
         app:showAsAction="ifRoom" />
     <item

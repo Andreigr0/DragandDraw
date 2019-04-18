@@ -48,28 +48,41 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
     var eraserSize = 50f
     var addTextSize = 100f
     var paintBackgroundColor = Color.WHITE
+//    var backgroundBitmap: Bitmap? = null
+    var backgroundBitmap: Bitmap? =  Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888)
+    var bitmapCanvasSize: Bitmap = Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888)
 
-    var alp = 255
+
+    var alpha = 255
     var red = 0
     var green = 0
-    var blue = 0
+    var blue = 135
 
-    private fun makePaint(alp: Int, red: Int, green: Int, blue: Int) = Paint().apply {
+    private fun adjustPaint(alpha: Int, red: Int, green: Int, blue: Int) = Paint().apply {
         strokeWidth = brushSize
         style = Paint.Style.STROKE
-        color = Color.argb(alp, red, green, blue)
+        color = Color.argb(alpha, red, green, blue)
 
         isAntiAlias = true
         isDither = true
         xfermode = null
     }
 
+    var paint = adjustPaint(alpha, red, green, blue)
+
     fun createNew(color: Int) {
         figures.clear()
         copy.clear()
+        backgroundBitmap = null
         paintBackgroundColor = color
         invalidate()
-        Log.i(TAG, "color: $color, paintback: $paintBackgroundColor, paint: ${mBackgroundPaint.color}")
+    }
+
+    fun setBackground(bitmap: Bitmap) {
+        Log.i(TAG, "Bitmap boxdraw $bitmap")
+        backgroundBitmap = bitmap
+//        bitmapCanvasSize = Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888)
+        invalidate()
     }
 
     private val figures = ArrayList<Figure>()
@@ -77,16 +90,14 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
     private var triggerUndo = true
     private lateinit var currentFigure: Figure
 
-    private val mBackgroundPaint = Paint().apply { color = paintBackgroundColor }
-
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val current = PointF(event.x, event.y)
 
-        val paint = makePaint(alp, red, green, blue)
+        paint = adjustPaint(alpha, red, green, blue)
+
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-
                 when (currentTool) {
                     BRUSH -> {
                         paint.apply {
@@ -130,6 +141,14 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                     BACKGROUND -> {
                     }
                     TEXT -> {
+                       val textPaint = Paint().apply {
+                            color = Color.BLUE
+                            style = Paint.Style.FILL
+//                            strokeWidth = 1f
+                            textSize = 100f
+                        }
+                        currentFigure = Figure(current, TEXT, textPaint)
+                        figures.add(currentFigure)
                     }
                 }
                 drawingCallback.checkMenuAfterDrawing()
@@ -169,6 +188,7 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                     BACKGROUND -> {
                     }
                     TEXT -> {
+                        currentFigure.current = current
                     }
                 }
                 invalidate()
@@ -176,10 +196,7 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
             MotionEvent.ACTION_UP -> {
                 when (currentTool) {
                     BRUSH -> {
-                        val path = Path()
-                        path.moveTo(current.x, current.y)
-                        currentFigure = Figure(current, BRUSH, paint, path)
-                        figures.add(currentFigure)
+                        currentFigure.path?.moveTo(current.x, current.y)
                     }
                 }
                 copy.clear()
@@ -191,9 +208,14 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
     }
 
     override fun onDraw(canvas: Canvas) {
-//        canvas.drawPaint(mBackgroundPaint)  // canvas.drawColor(Color.WHITE)
-//        Log.i(TAG, "color: paintback: $paintBackgroundColor, paint: ${mBackgroundPaint.color}")
-        canvas.drawColor(paintBackgroundColor)
+//        canvas.save()
+        if (backgroundBitmap != null) {
+            canvas.drawColor(paintBackgroundColor)
+            canvas.drawBitmap(backgroundBitmap!!, 0f, 0f, paint)
+        } else {
+            canvas.drawColor(paintBackgroundColor)
+        }
+
         for (figure in figures) {
             val left = Math.min(figure.origin.x, figure.current.x)
             val right = Math.max(figure.origin.x, figure.current.x)
@@ -208,6 +230,10 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                     canvas.drawPath(figure.path!!, figure.prefs)
                 }
                 CIRCLE -> {
+//                    val cx = figure.origin.x
+//                    val cy = figure.origin.y
+//                    val radius = Math.max(Math.abs(figure.current.x - figure.origin.x), Math.abs(figure.current.y - figure.origin.y))
+//
                     val cx = (figure.origin.x + figure.current.x) / 2
                     val cy = (figure.origin.y + figure.current.y) / 2
                     val radius = Math.max(
@@ -215,6 +241,7 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                         Math.abs((figure.current.y - figure.origin.y) / 2)
                     )
                     canvas.drawCircle(cx, cy, radius, figure.prefs)
+//                    canvas.drawCircle(100F, 100F, 100F, figure.prefs)
                 }
                 ELLIPSE -> {
                     canvas.drawOval(left, top, right, bottom, figure.prefs)
@@ -228,10 +255,11 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                 BACKGROUND -> {
                 }
                 TEXT -> {
-//                    canvas.drawText("Текст", 300f, 400f, paint)
+                    canvas.drawText("Текст", figure.current.x, figure.current.y, figure.prefs)
                 }
             }
         }
+//        canvas.restore()
     }
 
 
@@ -263,9 +291,8 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
             val c = Canvas(b)
             this.draw(c)
 
-            val path = File(Environment.getExternalStorageDirectory().toString())
-            val newFilePath =
-                File(path, "Запись на заборе от ${SimpleDateFormat("dd-MM-yyyy HH:mm").format(Date())}.jpg")
+            val path = File("${Environment.getExternalStorageDirectory()}/Pictures")
+            val newFilePath = File(path, "Рисунок ${SimpleDateFormat("dd-MM-yyyy HH").format(Date())}.jpg")
 
             val out = FileOutputStream(newFilePath)
             b.compress(Bitmap.CompressFormat.JPEG, 95, out)
