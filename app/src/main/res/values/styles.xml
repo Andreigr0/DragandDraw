@@ -1,11 +1,45 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="ButtonLinearLayout">
+        <item name="android:layout_width">@dimen/bottom_menu_item_size</item>
+        <item name="android:layout_height">@dimen/bottom_menu_item_size</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">4dp</item>
+    </style>
+
+    <style name="ButtonLayoutTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_weight">3</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/design_default_color_background</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="ButtonLayoutImage">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="BottomMenuSeekbar">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:max">255</item>
+        <item name="android:progress">255</item>
+    </style>
 </resources>

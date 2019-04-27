@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -13,7 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.backgroundColor
+import org.jetbrains.anko.backgroundColorResource
 import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.toast
 
@@ -22,66 +21,35 @@ class MainActivity : AppCompatActivity(), BoxDrawingView.DrawingCallback, Bottom
     private val disabledAlpha = 100
     private val enabledAlpha = 255
 
-    lateinit var tools: ArrayList<View>
-
-    override fun adjustBrushSize(value: Int) {
-        boxdrawing.brushSize = value.toFloat()
-    }
-
-    override fun adjustEraser(value: Int) {
-        boxdrawing.eraserSize = value.toFloat()
-    }
-
-    override fun adjustColor(alp: Int, red: Int, green: Int, blue: Int) {
-        Log.i(TAG, "Adjust color: Alpha: $alp Red: $red, Green: $green, Blue: $blue")
-        boxdrawing.alpha = alp
-        boxdrawing.red = red
-        boxdrawing.green = green
-        boxdrawing.blue = blue
-    }
-
-    override fun checkMenuAfterDrawing() {
-        button_undo.isEnabled = true
-        icon_undo.imageAlpha = enabledAlpha
-        button_redo.isEnabled = false
-        icon_redo.imageAlpha = disabledAlpha
-    }
+    private lateinit var tools: ArrayList<View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         tools = arrayListOf(
-                button_brush,
-                button_eraser,
-                button_circle,
-                button_ellipse,
-                button_rectangle,
-                button_line,
-                button_text
+            button_brush,
+            button_eraser,
+            button_circle,
+            button_ellipse,
+            button_rectangle,
+            button_line,
+            button_text
         )
 
-        currentTool(button_brush)
+        selectCurrentTool(button_brush)
 
         button_save.onClick {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
-                if (ContextCompat.checkSelfPermission(
-                                this@MainActivity,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        ) == PackageManager.PERMISSION_GRANTED
-
-                ) {
-                    if (boxdrawing.saveFile()) {
-                        Toast.makeText(this@MainActivity, "Saved", Toast.LENGTH_SHORT).show()
-                    }
-                }
+                if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+                    boxdrawing.saveFile()
             } else {
                 Toast.makeText(this@MainActivity, "Mmm", Toast.LENGTH_SHORT).show()
             }
         }
 
-        button_undo.apply {
+        with(button_undo) {
             isEnabled = false
             icon_undo.imageAlpha = disabledAlpha
             onClick {
@@ -92,7 +60,8 @@ class MainActivity : AppCompatActivity(), BoxDrawingView.DrawingCallback, Bottom
                 icon_redo.imageAlpha = enabledAlpha
             }
         }
-        button_redo.apply {
+
+        with(button_redo) {
             isEnabled = false
             icon_redo.imageAlpha = disabledAlpha
             onClick {
@@ -105,7 +74,7 @@ class MainActivity : AppCompatActivity(), BoxDrawingView.DrawingCallback, Bottom
         }
 
         button_new.onClick {
-            boxdrawing.createNew(Color.YELLOW)
+            boxdrawing.createNew()
             button_undo.isEnabled = false
             button_redo.isEnabled = false
             icon_undo.imageAlpha = disabledAlpha
@@ -118,35 +87,36 @@ class MainActivity : AppCompatActivity(), BoxDrawingView.DrawingCallback, Bottom
         }
 
         button_brush.onClick {
-            currentTool(button_brush)
+            selectCurrentTool(button_brush)
             BoxDrawingView.currentTool = BoxDrawingView.BRUSH
         }
 
         button_eraser.onClick {
-            currentTool(button_eraser)
+            selectCurrentTool(button_eraser)
             BoxDrawingView.currentTool = BoxDrawingView.ERASER
         }
 
         button_circle.onClick {
-            currentTool(button_circle)
+            selectCurrentTool(button_circle)
             BoxDrawingView.currentTool = BoxDrawingView.CIRCLE
         }
 
         button_ellipse.onClick {
-            currentTool(button_ellipse)
+            selectCurrentTool(button_ellipse)
             BoxDrawingView.currentTool = BoxDrawingView.ELLIPSE
         }
 
         button_rectangle.onClick {
-            currentTool(button_rectangle)
+            selectCurrentTool(button_rectangle)
             BoxDrawingView.currentTool = BoxDrawingView.RECTANGLE
         }
 
         button_line.onClick {
-            currentTool(button_line)
+            selectCurrentTool(button_line)
             BoxDrawingView.currentTool = BoxDrawingView.LINE
         }
 
+        // disabled
         button_background.onClick {
             toast("Выбор фона")
             val bitmap: Bitmap = BitmapFactory.decodeStream(assets.open("image.jpg"))
@@ -161,17 +131,39 @@ class MainActivity : AppCompatActivity(), BoxDrawingView.DrawingCallback, Bottom
         button_size.visibility = View.GONE
 
         button_text.onClick {
-            currentTool(button_text)
+            selectCurrentTool(button_text)
             BoxDrawingView.currentTool = BoxDrawingView.TEXT
         }
         button_size.onClick { toast("Изменить размер изображения") }
 
     }
 
-    private fun currentTool(view: View) {
+    private fun selectCurrentTool(view: View) {
         for (i in tools) {
-            i.backgroundColor = 0x7700FF
+            i.backgroundColorResource = R.color.colorPrimary
         }
-        view.setBackgroundColor(Color.BLUE)
+        view.backgroundColorResource = R.color.colorPrimaryDark
+    }
+
+    override fun adjustBrushSize(value: Int) {
+        boxdrawing.brushSize = value.toFloat()
+    }
+
+    override fun adjustEraser(value: Int) {
+        boxdrawing.eraserSize = value.toFloat()
+    }
+
+    override fun adjustColor(alpha: Int, red: Int, green: Int, blue: Int) {
+        boxdrawing.alpha = alpha
+        boxdrawing.red = red
+        boxdrawing.green = green
+        boxdrawing.blue = blue
+    }
+
+    override fun checkMenuAfterDrawing() {
+        button_undo.isEnabled = true
+        icon_undo.imageAlpha = enabledAlpha
+        button_redo.isEnabled = false
+        icon_redo.imageAlpha = disabledAlpha
     }
 }
