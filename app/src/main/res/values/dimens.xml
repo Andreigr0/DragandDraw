@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="bottom_menu_item_size">70sp</dimen>
+    <dimen name="bottomMenuPreview">35dp</dimen>
 </resources>

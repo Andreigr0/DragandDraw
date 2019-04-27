@@ -1,429 +1,212 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <com.example.draganddraw.BoxDrawingView
         android:id="@+id/boxdrawing"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_weight="1" />
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#BE0000FF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:background="@color/colorPrimary">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:gravity="center"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/button_undo"
-                android:layout_width="@dimen/bottom_menu_item_size"
-                android:layout_height="@dimen/bottom_menu_item_size"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="4dp">
+                style="@style/ButtonLinearLayout">
 
                 <ImageView
                     android:id="@+id/icon_undo"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    style="@style/ButtonLayoutImage"
                     android:src="@drawable/ic_undo_white_24dp" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="@string/undo"
-                    android:textColor="@color/design_default_color_background"
-                    android:textSize="10sp" />
+                    style="@style/ButtonLayoutTitle"
+                    android:text="@string/undo" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/button_redo"
-                android:layout_width="@dimen/bottom_menu_item_size"
-                android:layout_height="@dimen/bottom_menu_item_size"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="4dp">
+                style="@style/ButtonLinearLayout">
 
                 <ImageView
                     android:id="@+id/icon_redo"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    style="@style/ButtonLayoutImage"
                     android:src="@drawable/ic_redo_white_24dp" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="@string/redo"
-                    android:textColor="@color/design_default_color_background"
-                    android:textSize="10sp" />
+                    style="@style/ButtonLayoutTitle"
+                    android:text="@string/redo" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/button_new"
-                android:layout_width="@dimen/bottom_menu_item_size"
-                android:layout_height="@dimen/bottom_menu_item_size"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="4dp">
+                style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    style="@style/ButtonLayoutImage"
                     android:src="@drawable/ic_create" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="@string/create"
-                    android:textColor="@color/design_default_color_background"
-                    android:textSize="10sp" />
+                    style="@style/ButtonLayoutTitle"
+                    android:text="@string/create" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/button_save"
-                android:layout_width="@dimen/bottom_menu_item_size"
-                android:layout_height="@dimen/bottom_menu_item_size"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="4dp">
+                style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    style="@style/ButtonLayoutImage"
                     android:src="@drawable/ic_save" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="@string/save"
-                    android:textColor="@color/design_default_color_background"
-                    android:textSize="10sp" />
+                    style="@style/ButtonLayoutTitle"
+                    android:text="@string/save" />
             </LinearLayout>
 
 
             <LinearLayout
                 android:id="@+id/button_adjust"
-                android:layout_width="@dimen/bottom_menu_item_size"
-                android:layout_height="@dimen/bottom_menu_item_size"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="4dp">
+                style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    style="@style/ButtonLayoutImage"
                     android:src="@drawable/ic_adjust" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="@string/adjust"
-                    android:textColor="@color/design_default_color_background"
-                    android:textSize="10sp" />
+                    style="@style/ButtonLayoutTitle"
+                    android:text="@string/adjust" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/button_brush"
-                android:layout_width="@dimen/bottom_menu_item_size"
-                android:layout_height="@dimen/bottom_menu_item_size"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="4dp">
+                style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    style="@style/ButtonLayoutImage"
                     android:src="@drawable/ic_brush_black_24dp" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="@string/brush"
-                    android:textColor="@color/design_default_color_background"
-                    android:textSize="10sp" />
+                    style="@style/ButtonLayoutTitle"
+                    android:text="@string/brush" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/button_eraser"
-                android:layout_width="@dimen/bottom_menu_item_size"
-                android:layout_height="@dimen/bottom_menu_item_size"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="4dp">
+                style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    style="@style/ButtonLayoutImage"
                     android:src="@drawable/ic_eraser" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="@string/eraser"
-                    android:textColor="@color/design_default_color_background"
-                    android:textSize="10sp" />
+                    style="@style/ButtonLayoutTitle"
+                    android:text="@string/eraser" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/button_circle"
-                android:layout_width="@dimen/bottom_menu_item_size"
-                android:layout_height="@dimen/bottom_menu_item_size"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="4dp">
+                style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    style="@style/ButtonLayoutImage"
                     android:src="@drawable/ic_circle" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="@string/circle"
-                    android:textColor="@color/design_default_color_background"
-                    android:textSize="10sp" />
+                    style="@style/ButtonLayoutTitle"
+                    android:text="@string/circle" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/button_ellipse"
-                android:layout_width="@dimen/bottom_menu_item_size"
-                android:layout_height="@dimen/bottom_menu_item_size"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="4dp">
+                style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    style="@style/ButtonLayoutImage"
                     android:src="@drawable/ic_ellipse" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="@string/ellipse"
-                    android:textColor="@color/design_default_color_background"
-                    android:textSize="10sp" />
+                    style="@style/ButtonLayoutTitle"
+                    android:text="@string/ellipse" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/button_rectangle"
-                android:layout_width="@dimen/bottom_menu_item_size"
-                android:layout_height="@dimen/bottom_menu_item_size"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="4dp">
+                style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    style="@style/ButtonLayoutImage"
                     android:src="@drawable/ic_rectangle" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="@string/rectangle"
-                    android:textColor="@color/design_default_color_background"
-                    android:textSize="10sp" />
+                    style="@style/ButtonLayoutTitle"
+                    android:text="@string/rectangle" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/button_line"
-                android:layout_width="@dimen/bottom_menu_item_size"
-                android:layout_height="@dimen/bottom_menu_item_size"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="4dp">
+                style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    style="@style/ButtonLayoutImage"
                     android:src="@drawable/ic_line" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="@string/line"
-                    android:textColor="@color/design_default_color_background"
-                    android:textSize="10sp" />
+                    style="@style/ButtonLayoutTitle"
+                    android:text="@string/line" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/button_text"
-                android:layout_width="@dimen/bottom_menu_item_size"
-                android:layout_height="@dimen/bottom_menu_item_size"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="4dp">
+                style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    style="@style/ButtonLayoutImage"
                     android:src="@drawable/ic_text" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="@string/text"
-                    android:textColor="@color/design_default_color_background"
-                    android:textSize="10sp" />
+                    style="@style/ButtonLayoutTitle"
+                    android:text="@string/text" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/button_size"
-                android:layout_width="@dimen/bottom_menu_item_size"
-                android:layout_height="@dimen/bottom_menu_item_size"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="4dp">
+                style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    style="@style/ButtonLayoutImage"
                     android:src="@drawable/ic_size" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="@string/size"
-                    android:textColor="@color/design_default_color_background"
-                    android:textSize="10sp" />
+                    style="@style/ButtonLayoutTitle"
+                    android:text="@string/size" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/button_background"
-                android:layout_width="@dimen/bottom_menu_item_size"
-                android:layout_height="@dimen/bottom_menu_item_size"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="4dp">
+                style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    style="@style/ButtonLayoutImage"
                     android:src="@drawable/ic_picture" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="@string/background"
-                    android:textColor="@color/design_default_color_background"
-                    android:textSize="10sp" />
+                    style="@style/ButtonLayoutTitle"
+                    android:text="@string/background" />
             </LinearLayout>
 
         </LinearLayout>
     </HorizontalScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

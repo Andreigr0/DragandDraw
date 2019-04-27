@@ -4,9 +4,9 @@ import android.content.Context
 import android.graphics.*
 import android.os.Environment
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -18,11 +18,7 @@ val TAG = "BoxDrawing"
 // Andrey
 
 data class Figure(
-    val origin: PointF, val type: Int = 0, var prefs: Paint = Paint().apply {
-        color = Color.BLUE
-        strokeWidth = 20f
-        style = Paint.Style.STROKE
-    }, var path: Path? = null, var current: PointF = origin
+    val originPosition: PointF, val type: Int, var prefs: Paint, var path: Path? = null, var currentPosition: PointF = originPosition
 )
 
 
@@ -47,13 +43,11 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
 
     var brushSize = 50f
     var eraserSize = 50f
-    var addTextSize = 100f
+//    var addTextSize = 100f
     var paintBackgroundColor = Color.WHITE
-//    var backgroundBitmap: Bitmap? = null
     var backgroundBitmap: Bitmap? =  Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888)
-    var bitmapCanvasSize: Bitmap = Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888)
 
-
+    // Brush settings
     var alpha = 255
     var red = 0
     var green = 0
@@ -71,20 +65,7 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
 
     var paint = adjustPaint(alpha, red, green, blue)
 
-    fun createNew(color: Int) {
-        figures.clear()
-        copy.clear()
-        backgroundBitmap = null
-        paintBackgroundColor = color
-        invalidate()
-    }
 
-    fun setBackground(bitmap: Bitmap) {
-        Log.i(TAG, "Bitmap boxdraw $bitmap")
-        backgroundBitmap = bitmap
-//        bitmapCanvasSize = Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888)
-        invalidate()
-    }
 
     private val figures = ArrayList<Figure>()
     private val copy = ArrayList<Figure>()
@@ -158,38 +139,38 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                 when (currentTool) {
                     BRUSH -> {
                         currentFigure.path?.quadTo(
-                            currentFigure.current.x,
-                            currentFigure.current.y,
-                            (current.x + currentFigure.current.x) / 2,
-                            (current.y + currentFigure.current.y) / 2
+                            currentFigure.currentPosition.x,
+                            currentFigure.currentPosition.y,
+                            (current.x + currentFigure.currentPosition.x) / 2,
+                            (current.y + currentFigure.currentPosition.y) / 2
                         )
-                        currentFigure.current = current
+                        currentFigure.currentPosition = current
                     }
                     ERASER -> {
                         currentFigure.path?.quadTo(
-                            currentFigure.current.x,
-                            currentFigure.current.y,
-                            (current.x + currentFigure.current.x) / 2,
-                            (current.y + currentFigure.current.y) / 2
+                            currentFigure.currentPosition.x,
+                            currentFigure.currentPosition.y,
+                            (current.x + currentFigure.currentPosition.x) / 2,
+                            (current.y + currentFigure.currentPosition.y) / 2
                         )
-                        currentFigure.current = current
+                        currentFigure.currentPosition = current
                     }
                     CIRCLE -> {
-                        currentFigure.current = current
+                        currentFigure.currentPosition = current
                     }
                     ELLIPSE -> {
-                        currentFigure.current = current
+                        currentFigure.currentPosition = current
                     }
                     RECTANGLE -> {
-                        currentFigure.current = current
+                        currentFigure.currentPosition = current
                     }
                     LINE -> {
-                        currentFigure.current = current
+                        currentFigure.currentPosition = current
                     }
                     BACKGROUND -> {
                     }
                     TEXT -> {
-                        currentFigure.current = current
+                        currentFigure.currentPosition = current
                     }
                 }
                 invalidate()
@@ -209,7 +190,6 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
     }
 
     override fun onDraw(canvas: Canvas) {
-//        canvas.save()
         if (backgroundBitmap != null) {
             canvas.drawColor(paintBackgroundColor)
             canvas.drawBitmap(backgroundBitmap!!, 0f, 0f, paint)
@@ -218,10 +198,10 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
         }
 
         for (figure in figures) {
-            val left = Math.min(figure.origin.x, figure.current.x)
-            val right = Math.max(figure.origin.x, figure.current.x)
-            val top = Math.min(figure.origin.y, figure.current.y)
-            val bottom = Math.max(figure.origin.y, figure.current.y)
+            val left = Math.min(figure.originPosition.x, figure.currentPosition.x)
+            val right = Math.max(figure.originPosition.x, figure.currentPosition.x)
+            val top = Math.min(figure.originPosition.y, figure.currentPosition.y)
+            val bottom = Math.max(figure.originPosition.y, figure.currentPosition.y)
 
             when (figure.type) {
                 BRUSH -> {
@@ -231,18 +211,10 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                     canvas.drawPath(figure.path!!, figure.prefs)
                 }
                 CIRCLE -> {
-//                    val cx = figure.origin.x
-//                    val cy = figure.origin.y
-//                    val radius = Math.max(Math.abs(figure.current.x - figure.origin.x), Math.abs(figure.current.y - figure.origin.y))
-//
-                    val cx = (figure.origin.x + figure.current.x) / 2
-                    val cy = (figure.origin.y + figure.current.y) / 2
-                    val radius = Math.max(
-                        Math.abs((figure.current.x - figure.origin.x) / 2),
-                        Math.abs((figure.current.y - figure.origin.y) / 2)
-                    )
+                    val cx = figure.originPosition.x
+                    val cy = figure.originPosition.y
+                    val radius = Math.max(Math.abs(figure.currentPosition.x - figure.originPosition.x), Math.abs(figure.currentPosition.y - figure.originPosition.y))
                     canvas.drawCircle(cx, cy, radius, figure.prefs)
-//                    canvas.drawCircle(100F, 100F, 100F, figure.prefs)
                 }
                 ELLIPSE -> {
                     canvas.drawOval(left, top, right, bottom, figure.prefs)
@@ -251,16 +223,30 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                     canvas.drawRect(left, top, right, bottom, figure.prefs)
                 }
                 LINE -> {
-                    canvas.drawLine(figure.origin.x, figure.origin.y, figure.current.x, figure.current.y, figure.prefs)
+                    canvas.drawLine(figure.originPosition.x, figure.originPosition.y, figure.currentPosition.x, figure.currentPosition.y, figure.prefs)
                 }
                 BACKGROUND -> {
                 }
                 TEXT -> {
-                    canvas.drawText("Текст", figure.current.x, figure.current.y, figure.prefs)
+                    canvas.drawText("Текст", figure.currentPosition.x, figure.currentPosition.y, figure.prefs)
                 }
             }
         }
-//        canvas.restore()
+    }
+
+
+    fun createNew() {
+        figures.clear()
+        copy.clear()
+        backgroundBitmap = null
+        paintBackgroundColor = Color.WHITE
+        invalidate()
+    }
+
+    fun setBackground(bitmap: Bitmap) {
+        backgroundBitmap = bitmap
+//        bitmapCanvasSize = Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888)
+        invalidate()
     }
 
 
@@ -293,13 +279,15 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
             this.draw(c)
 
             val path = File("${Environment.getExternalStorageDirectory()}/Pictures")
-            val newFilePath = File(path, "Рисунок ${SimpleDateFormat("dd-MM-yyyy HH").format(Date())}.jpg")
+            val newFilePath = File(path, "Рисунок ${SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Date())}.jpg")
 
             val out = FileOutputStream(newFilePath)
             b.compress(Bitmap.CompressFormat.JPEG, 95, out)
+            Toast.makeText(context, "Рисунок ${SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Date())} сохранён в ${Environment.getExternalStorageDirectory()}/Pictures", Toast.LENGTH_LONG).show()
             true
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
+            Toast.makeText(context, "Ошибка: ${e.printStackTrace()}", Toast.LENGTH_SHORT).show()
             false
         }
     }
