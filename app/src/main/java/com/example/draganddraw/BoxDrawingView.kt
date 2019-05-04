@@ -7,6 +7,8 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
+import androidx.core.view.drawToBitmap
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -18,13 +20,10 @@ val TAG = "BoxDrawing"
 // Andrey
 
 data class Figure(
-    val origin: PointF, val type: Int = 0, var prefs: Paint = Paint().apply {
-        color = Color.BLUE
-        strokeWidth = 20f
-        style = Paint.Style.STROKE
-    }, var path: Path? = null, var current: PointF = origin
+        val originPosition: PointF, val type: Int, var prefs: Paint, var path: Path? = null, var currentPosition: PointF = originPosition
 )
 
+// Vlad
 
 class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(context, attrSet) {
     interface DrawingCallback {
@@ -33,58 +32,31 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
 
     // Andrey comment
     private val drawingCallback: DrawingCallback = context as DrawingCallback
+    var backgroundBitmap: Bitmap? = null
 
     companion object {
-        val BRUSH = 0
-        val ERASER = 1
-        val CIRCLE = 2
-        val ELLIPSE = 3
-        val RECTANGLE = 4
-        val LINE = 5
-        val BACKGROUND = 6
-        val TEXT = 7
+        const val BRUSH = 0
+        const val ERASER = 1
+        const val CIRCLE = 2
+        const val ELLIPSE = 3
+        const val RECTANGLE = 4
+        const val LINE = 5
+        const val BACKGROUND = 6
+        const val TEXT = 7
         var currentTool = BRUSH
-    }
 
-    var brushSize = 50f
-    var eraserSize = 50f
-    var addTextSize = 100f
-    var paintBackgroundColor = Color.WHITE
-//    var backgroundBitmap: Bitmap? = null
-    var backgroundBitmap: Bitmap? =  Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888)
-    var bitmapCanvasSize: Bitmap = Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888)
+        //    var addTextSize = 100f
+        var brushSize = 50f
+        var eraserSize = 50f
 
+        // Brush settings
+        var brushAlpha = 255
+        var brushRed = 0
+        var brushGreen = 0
+        var brushBlue = 0
 
-    var alpha = 255
-    var red = 0
-    var green = 0
-    var blue = 135
-
-    private fun adjustPaint(alpha: Int, red: Int, green: Int, blue: Int) = Paint().apply {
-        strokeWidth = brushSize
-        style = Paint.Style.STROKE
-        color = Color.argb(alpha, red, green, blue)
-
-        isAntiAlias = true
-        isDither = true
-        xfermode = null
-    }
-
-    var paint = adjustPaint(alpha, red, green, blue)
-
-    fun createNew(color: Int) {
-        figures.clear()
-        copy.clear()
-        backgroundBitmap = null
-        paintBackgroundColor = color
-        invalidate()
-    }
-
-    fun setBackground(bitmap: Bitmap) {
-        Log.i(TAG, "Bitmap boxdraw $bitmap")
-        backgroundBitmap = bitmap
-//        bitmapCanvasSize = Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888)
-        invalidate()
+        var paintBackgroundColor = Color.WHITE
+        val backgroundPaint = Paint()
     }
 
     private val figures = ArrayList<Figure>()
@@ -92,11 +64,16 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
     private var triggerUndo = true
     private lateinit var currentFigure: Figure
 
-
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val current = PointF(event.x, event.y)
-
-        paint = adjustPaint(alpha, red, green, blue)
+        val paint = Paint().apply {
+            strokeWidth = brushSize
+            style = Paint.Style.STROKE
+            color = Color.argb(brushAlpha, brushRed, brushGreen, brushBlue)
+            isAntiAlias = true
+            isDither = true
+            xfermode = null
+        }
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
@@ -109,89 +86,98 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                         val path = Path()
                         path.moveTo(current.x, current.y)
                         currentFigure = Figure(current, BRUSH, paint, path)
-                        figures.add(currentFigure)
                     }
                     ERASER -> {
-                        val eraserPaint = Paint().apply {
+                        val path = Path()
+                        path.moveTo(current.x, current.y)
+                        currentFigure = Figure(current, ERASER, Paint().apply {
                             color = paintBackgroundColor
                             style = Paint.Style.STROKE
                             strokeWidth = eraserSize
                             strokeJoin = Paint.Join.ROUND
                             strokeCap = Paint.Cap.ROUND
-                        }
-                        val path = Path()
-                        path.moveTo(current.x, current.y)
-                        currentFigure = Figure(current, ERASER, eraserPaint, path)
-                        figures.add(currentFigure)
+                        }, path)
                     }
                     CIRCLE -> {
                         currentFigure = Figure(current, CIRCLE, paint)
-                        figures.add(currentFigure)
                     }
                     ELLIPSE -> {
                         currentFigure = Figure(current, ELLIPSE, paint)
-                        figures.add(currentFigure)
                     }
                     RECTANGLE -> {
                         currentFigure = Figure(current, RECTANGLE, paint)
-                        figures.add(currentFigure)
                     }
                     LINE -> {
                         currentFigure = Figure(current, LINE, paint)
-                        figures.add(currentFigure)
                     }
                     BACKGROUND -> {
+                        backgroundBitmap = this.drawToBitmap()
+                        figures.clear()
+                        val targetColor = Color.argb(0,0,0,0)
+                        val replacementColor = Color.RED
+
+                        var x = current.x.toInt()
+                        var y = current.y.toInt()
+                        var currentPixel: Int
+
+                        do {
+                            backgroundBitmap!!.setPixel(x, y, replacementColor)
+                            backgroundBitmap!!.setPixel(x - 1, y, replacementColor)
+                            backgroundBitmap!!.setPixel(x + 1, y, replacementColor)
+                            backgroundBitmap!!.setPixel(x, y - 1, replacementColor)
+                            backgroundBitmap!!.setPixel(x, y + 1, replacementColor)
+                            backgroundBitmap!!.setPixel(x + 1, y + 1, replacementColor)
+                            backgroundBitmap!!.setPixel(x - 1, y + 1, replacementColor)
+                            backgroundBitmap!!.setPixel(x - 1, y - 1, replacementColor)
+                            backgroundBitmap!!.setPixel(x + 1, y - 1, replacementColor)
+                            currentPixel = backgroundBitmap!!.getPixel(x, y)
+                            Log.i(TAG, "current pixel: $currentPixel // $targetColor")
+                            x--
+                            Log.i(TAG, "current pixel 2: $currentPixel // $targetColor")
+                        } while (currentPixel == targetColor && x > 0 && y > 0)
+
                     }
                     TEXT -> {
-                       val textPaint = Paint().apply {
+                        val textPaint = Paint().apply {
                             color = Color.BLUE
                             style = Paint.Style.FILL
 //                            strokeWidth = 1f
                             textSize = 100f
                         }
                         currentFigure = Figure(current, TEXT, textPaint)
-                        figures.add(currentFigure)
                     }
                 }
+
+                if (figures.size < 30 && currentTool != BACKGROUND) {
+                    figures.add(currentFigure)
+                    Log.i(TAG, "Figures (${figures.size})")
+
+                } else if (currentTool != BACKGROUND) {
+                    val start = copy.size
+                    copy.addAll(figures)
+                    figures.clear()
+                    figures.add(copy[0])
+                    backgroundBitmap = this.drawToBitmap()
+                    figures.removeAt(0)
+                    copy.removeAt(0)
+                    val end = copy.size
+                    for (i in start until end)
+                        figures.add(copy[i])
+                    figures.add(currentFigure)
+                    Log.i(TAG, "Figures size\t\t\t ${figures.size}")
+                }
+                invalidate()
                 drawingCallback.checkMenuAfterDrawing()
             }
             MotionEvent.ACTION_MOVE -> {
-                when (currentTool) {
-                    BRUSH -> {
-                        currentFigure.path?.quadTo(
-                            currentFigure.current.x,
-                            currentFigure.current.y,
-                            (current.x + currentFigure.current.x) / 2,
-                            (current.y + currentFigure.current.y) / 2
-                        )
-                        currentFigure.current = current
-                    }
-                    ERASER -> {
-                        currentFigure.path?.quadTo(
-                            currentFigure.current.x,
-                            currentFigure.current.y,
-                            (current.x + currentFigure.current.x) / 2,
-                            (current.y + currentFigure.current.y) / 2
-                        )
-                        currentFigure.current = current
-                    }
-                    CIRCLE -> {
-                        currentFigure.current = current
-                    }
-                    ELLIPSE -> {
-                        currentFigure.current = current
-                    }
-                    RECTANGLE -> {
-                        currentFigure.current = current
-                    }
-                    LINE -> {
-                        currentFigure.current = current
-                    }
-                    BACKGROUND -> {
-                    }
-                    TEXT -> {
-                        currentFigure.current = current
-                    }
+                if (currentTool != BACKGROUND) {
+                    currentFigure.path?.quadTo(
+                            currentFigure.currentPosition.x,
+                            currentFigure.currentPosition.y,
+                            (current.x + currentFigure.currentPosition.x) / 2,
+                            (current.y + currentFigure.currentPosition.y) / 2
+                    )
+                    currentFigure.currentPosition = current
                 }
                 invalidate()
             }
@@ -210,19 +196,16 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
     }
 
     override fun onDraw(canvas: Canvas) {
-//        canvas.save()
+        canvas.drawColor(paintBackgroundColor)
         if (backgroundBitmap != null) {
-            canvas.drawColor(paintBackgroundColor)
-            canvas.drawBitmap(backgroundBitmap!!, 0f, 0f, paint)
-        } else {
-            canvas.drawColor(paintBackgroundColor)
+            canvas.drawBitmap(backgroundBitmap!!, 0f, 0f, backgroundPaint)
         }
 
         for (figure in figures) {
-            val left = Math.min(figure.origin.x, figure.current.x)
-            val right = Math.max(figure.origin.x, figure.current.x)
-            val top = Math.min(figure.origin.y, figure.current.y)
-            val bottom = Math.max(figure.origin.y, figure.current.y)
+            val left = Math.min(figure.originPosition.x, figure.currentPosition.x)
+            val right = Math.max(figure.originPosition.x, figure.currentPosition.x)
+            val top = Math.min(figure.originPosition.y, figure.currentPosition.y)
+            val bottom = Math.max(figure.originPosition.y, figure.currentPosition.y)
 
             when (figure.type) {
                 BRUSH -> {
@@ -232,18 +215,10 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                     canvas.drawPath(figure.path!!, figure.prefs)
                 }
                 CIRCLE -> {
-//                    val cx = figure.origin.x
-//                    val cy = figure.origin.y
-//                    val radius = Math.max(Math.abs(figure.current.x - figure.origin.x), Math.abs(figure.current.y - figure.origin.y))
-//
-                    val cx = (figure.origin.x + figure.current.x) / 2
-                    val cy = (figure.origin.y + figure.current.y) / 2
-                    val radius = Math.max(
-                        Math.abs((figure.current.x - figure.origin.x) / 2),
-                        Math.abs((figure.current.y - figure.origin.y) / 2)
-                    )
+                    val cx = figure.originPosition.x
+                    val cy = figure.originPosition.y
+                    val radius = Math.max(Math.abs(figure.currentPosition.x - figure.originPosition.x), Math.abs(figure.currentPosition.y - figure.originPosition.y))
                     canvas.drawCircle(cx, cy, radius, figure.prefs)
-//                    canvas.drawCircle(100F, 100F, 100F, figure.prefs)
                 }
                 ELLIPSE -> {
                     canvas.drawOval(left, top, right, bottom, figure.prefs)
@@ -252,55 +227,59 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                     canvas.drawRect(left, top, right, bottom, figure.prefs)
                 }
                 LINE -> {
-                    canvas.drawLine(figure.origin.x, figure.origin.y, figure.current.x, figure.current.y, figure.prefs)
+                    canvas.drawLine(figure.originPosition.x, figure.originPosition.y, figure.currentPosition.x, figure.currentPosition.y, figure.prefs)
                 }
                 BACKGROUND -> {
                 }
                 TEXT -> {
-                    canvas.drawText("Текст", figure.current.x, figure.current.y, figure.prefs)
+                    canvas.drawText("Текст", figure.currentPosition.x, figure.currentPosition.y, figure.prefs)
                 }
             }
         }
-//        canvas.restore()
     }
 
+
+    fun createNew() {
+        figures.clear()
+        copy.clear()
+        backgroundBitmap = Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888)
+        invalidate()
+    }
 
     fun undo(): Boolean {
         if (triggerUndo) {
             copy.addAll(figures)
             triggerUndo = false
         }
+
         if (figures.size != 0) {
             figures.removeAt(figures.size - 1)
             invalidate()
-            return (figures.size != 0)
         }
-        return false
+        return (figures.size != 0)
     }
 
     fun redo(): Boolean {
         if (copy.size != 0 && copy.size != figures.size) {
             figures.add(copy[figures.size])
             invalidate()
-            return (copy.size > figures.size)
         }
-        return false
+        return (copy.size > figures.size)
     }
 
     fun saveFile(): Boolean {
         return try {
-            val b = Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888)
-            val c = Canvas(b)
-            this.draw(c)
-
             val path = File("${Environment.getExternalStorageDirectory()}/Pictures")
-            val newFilePath = File(path, "Рисунок ${SimpleDateFormat("dd-MM-yyyy HH").format(Date())}.jpg")
-
+            val newFilePath = File(path, "Рисунок ${SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Date())}.jpg")
             val out = FileOutputStream(newFilePath)
-            b.compress(Bitmap.CompressFormat.JPEG, 95, out)
+
+            this.drawToBitmap().compress(Bitmap.CompressFormat.JPEG, 95, out)
+
+            Toast.makeText(context, "Рисунок ${SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Date())} сохранён в ${Environment.getExternalStorageDirectory()}/Pictures", Toast.LENGTH_LONG).show()
             true
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
+            Toast.makeText(context, "Ошибка: ${e.printStackTrace()}", Toast.LENGTH_SHORT).show()
             false
         }
     }

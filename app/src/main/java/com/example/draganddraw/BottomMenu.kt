@@ -1,37 +1,17 @@
 package com.example.draganddraw
 
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.core.graphics.drawable.toDrawable
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_menu.*
 import org.jetbrains.anko.sdk27.coroutines.onSeekBarChangeListener
 
 class BottomMenu : BottomSheetDialogFragment() {
-    interface BottomMenuCallback {
-        fun adjustBrushSize(value: Int)
-        fun adjustEraser(value: Int)
-        fun adjustColor(alp: Int, red: Int, green: Int, blue: Int)
-    }
-
-    private lateinit var callback: BottomMenuCallback
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        callback = activity as BottomMenuCallback
-    }
-
-    var alpha = 200
-    var red = 200
-    var green = 140
-    var blue = 150
-    val col = Color.argb(alpha, red, green, blue).toDrawable()
+    private fun preview() = Color.argb(BoxDrawingView.brushAlpha, BoxDrawingView.brushRed, BoxDrawingView.brushGreen, BoxDrawingView.brushBlue).toDrawable()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.bottom_menu, container, false)
@@ -40,83 +20,69 @@ class BottomMenu : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Don't display keyboard automatically
-        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
+        // dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
-        // Brush size
-        brush_size.progress = (activity?.boxdrawing?.brushSize)!!.toInt()
-        brush_size_text.setText(brush_size.progress.toString())
+        brush_size.progress = BoxDrawingView.brushSize.toInt()
+        eraser_size.progress = BoxDrawingView.eraserSize.toInt()
+        alpha_value.progress = BoxDrawingView.brushAlpha
+        red_value.progress = BoxDrawingView.brushRed
+        green_value.progress = BoxDrawingView.brushGreen
+        blue_value.progress = BoxDrawingView.brushBlue
+
+        brush_size_text.text = brush_size.progress.toString()
+        eraser_size_text.text = eraser_size.progress.toString()
+        alpha_value_text.text = BoxDrawingView.brushAlpha.toString()
+        red_value_text.text = BoxDrawingView.brushRed.toString()
+        green_value_text.text = BoxDrawingView.brushGreen.toString()
+        blue_value_text.text = BoxDrawingView.brushBlue.toString()
+
+        brush_preview.setImageDrawable(preview())
+
 
         brush_size.onSeekBarChangeListener {
-            onProgressChanged { seekBar, i, b -> brush_size_text.setText(i.toString()) }
-            onStopTrackingTouch { callback.adjustBrushSize(it?.progress!!) }
+            onProgressChanged { _, i, _ ->
+                brush_size_text.text = i.toString()
+                BoxDrawingView.brushSize = i.toFloat()
+            }
         }
-
-        // Eraser size
-        eraser_size.progress = activity?.boxdrawing?.eraserSize!!.toInt()
-        eraser_size_text.setText(eraser_size.progress.toString())
 
         eraser_size.onSeekBarChangeListener {
-            onProgressChanged { seekBar, i, b -> eraser_size_text.setText(i.toString()) }
-            onStopTrackingTouch { callback.adjustEraser(it?.progress!!) }
+            onProgressChanged { _, i, _ ->
+                eraser_size_text.text = i.toString()
+                BoxDrawingView.eraserSize = i.toFloat()
+            }
         }
-
-        // Alpha channel
-        alpha_value.progress = activity?.boxdrawing?.alpha!!.toInt()
-        alpha = alpha_value.progress
-        alpha_value_text.setText(alpha_value.progress.toString())
 
         alpha_value.onSeekBarChangeListener {
-            onProgressChanged { seekBar, i, b ->
-                alpha_value_text.setText(i.toString())
-                alpha = i
-                brush_preview.setImageDrawable(col.apply { alpha = alpha })
+            onProgressChanged { _, i, _ ->
+                alpha_value_text.text = i.toString()
+                brush_preview.setImageDrawable(preview())
+                BoxDrawingView.brushAlpha = i
             }
-            onStopTrackingTouch { callback.adjustColor(alpha, red, green, blue) }
         }
-
-        // Red channel
-        red_value.progress = activity?.boxdrawing?.red!!.toInt()
-        red = red_value.progress
-        red_value_text.setText(red_value.progress.toString())
 
         red_value.onSeekBarChangeListener {
-            onProgressChanged { seekBar, i, b ->
-                red_value_text.setText(i.toString())
-                red = i
-                brush_preview.setImageDrawable(col.apply { color = Color.argb(alpha, red, green, blue) })
+            onProgressChanged { _, i, _ ->
+                red_value_text.text = i.toString()
+                brush_preview.setImageDrawable(preview())
+                BoxDrawingView.brushRed = i
             }
-            onStopTrackingTouch { callback.adjustColor(alpha, red, green, blue) }
         }
-
-        // Green channel
-        green_value.progress = activity?.boxdrawing?.green!!.toInt()
-        green = green_value.progress
-        green_value_text.setText(green_value.progress.toString())
 
         green_value.onSeekBarChangeListener {
-            onProgressChanged { seekBar, i, b ->
-                green_value_text.setText(i.toString())
-                green = i
-                brush_preview.setImageDrawable(col.apply { color = Color.argb(alpha, red, green, blue) })
+            onProgressChanged { _, i, _ ->
+                green_value_text.text = i.toString()
+                brush_preview.setImageDrawable(preview())
+                BoxDrawingView.brushGreen = i
             }
-            onStopTrackingTouch { callback.adjustColor(alpha, red, green, blue) }
         }
-
-        // Blue channel
-        blue_value.progress = activity?.boxdrawing?.blue!!.toInt()
-        blue = blue_value.progress
-        blue_value_text.setText(blue_value.progress.toString())
-        brush_preview.setImageDrawable(col.apply { color = Color.argb(alpha, red, green, blue) })
 
         blue_value.onSeekBarChangeListener {
-            onProgressChanged { seekBar, i, b ->
-                blue_value_text.setText(i.toString())
-                blue = i
-                brush_preview.setImageDrawable(col.apply { color = Color.argb(alpha, red, green, blue) })
+            onProgressChanged { _, i, _ ->
+                blue_value_text.text = i.toString()
+                brush_preview.setImageDrawable(preview())
+                BoxDrawingView.brushBlue = i
             }
-            onStopTrackingTouch { callback.adjustColor(alpha, red, green, blue) }
         }
-
-
     }
 }
