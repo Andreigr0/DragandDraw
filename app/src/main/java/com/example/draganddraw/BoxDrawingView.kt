@@ -33,6 +33,7 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
     private val drawingCallback: DrawingCallback = context as DrawingCallback
     var backgroundBitmap: Bitmap? = null
     // Fetched remote branch added by Vlad and made some changes
+    // Commit a little more changes
 
     companion object {
         const val BRUSH = 0
