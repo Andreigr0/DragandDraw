@@ -17,27 +17,24 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 val TAG = "BoxDrawing"
-// Andrey
 
 data class Figure(
-        val originPosition: PointF, val type: Int, var prefs: Paint, var path: Path? = null, var currentPosition: PointF = originPosition
+    val originPosition: PointF,
+    val type: Int,
+    var prefs: Paint,
+    var path: Path? = null,
+    var currentPosition: PointF = originPosition
 )
-
-// Vlad
 
 class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(context, attrSet) {
     interface DrawingCallback {
         fun checkMenuAfterDrawing()
     }
 
-    // Commit changes by Vlad
     private val drawingCallback: DrawingCallback = context as DrawingCallback
     var backgroundBitmap: Bitmap? = null
-    // Fetched remote branch added by Vlad and made some changes
-    // Commit a little more changes
 
     companion object {
-        // Commit some more changes by Vlad
         const val BRUSH = 0
         const val ERASER = 1
         const val CIRCLE = 2
@@ -116,28 +113,48 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                     BACKGROUND -> {
                         backgroundBitmap = this.drawToBitmap()
                         figures.clear()
-                        val targetColor = Color.argb(0,0,0,0)
-                        val replacementColor = Color.RED
+                        val point = Point()
+                        point.x = event.x.toInt()
+                        point.y = event.y.toInt()
 
-                        var x = current.x.toInt()
-                        var y = current.y.toInt()
-                        var currentPixel: Int
 
-                        do {
-                            backgroundBitmap!!.setPixel(x, y, replacementColor)
-                            backgroundBitmap!!.setPixel(x - 1, y, replacementColor)
-                            backgroundBitmap!!.setPixel(x + 1, y, replacementColor)
-                            backgroundBitmap!!.setPixel(x, y - 1, replacementColor)
-                            backgroundBitmap!!.setPixel(x, y + 1, replacementColor)
-                            backgroundBitmap!!.setPixel(x + 1, y + 1, replacementColor)
-                            backgroundBitmap!!.setPixel(x - 1, y + 1, replacementColor)
-                            backgroundBitmap!!.setPixel(x - 1, y - 1, replacementColor)
-                            backgroundBitmap!!.setPixel(x + 1, y - 1, replacementColor)
-                            currentPixel = backgroundBitmap!!.getPixel(x, y)
-                            Log.i(TAG, "current pixel: $currentPixel // $targetColor")
-                            x--
-                            Log.i(TAG, "current pixel 2: $currentPixel // $targetColor")
-                        } while (currentPixel == targetColor && x > 0 && y > 0)
+//                        doAsync {
+//                            val f = FloodFill()
+//                            f.floodFill(backgroundBitmap, point, backgroundBitmap!!.getPixel(x.toInt(), y.toInt()), Color.argb(brushAlpha, brushRed, brushGreen, brushBlue))
+
+                        val q = QueueLinearFloodFiller(
+                            backgroundBitmap,
+                            backgroundBitmap!!.getPixel(event.x.toInt(), event.y.toInt()),
+                            Color.rgb(brushRed, brushGreen, brushBlue)
+                        )
+                        q.setTolerance(50)
+                        q.floodFill(event.x.toInt(), event.y.toInt())
+                        invalidate()
+//                        }
+
+//                        figures.clear()
+//                        val targetColor = Color.argb(0,0,0,0)
+//                        val replacementColor = Color.RED
+//
+//                        var x = current.x.toInt()
+//                        var y = current.y.toInt()
+//                        var currentPixel: Int
+//
+//                        do {
+//                            backgroundBitmap!!.setPixel(x, y, replacementColor)
+//                            backgroundBitmap!!.setPixel(x - 1, y, replacementColor)
+//                            backgroundBitmap!!.setPixel(x + 1, y, replacementColor)
+//                            backgroundBitmap!!.setPixel(x, y - 1, replacementColor)
+//                            backgroundBitmap!!.setPixel(x, y + 1, replacementColor)
+//                            backgroundBitmap!!.setPixel(x + 1, y + 1, replacementColor)
+//                            backgroundBitmap!!.setPixel(x - 1, y + 1, replacementColor)
+//                            backgroundBitmap!!.setPixel(x - 1, y - 1, replacementColor)
+//                            backgroundBitmap!!.setPixel(x + 1, y - 1, replacementColor)
+//                            currentPixel = backgroundBitmap!!.getPixel(x, y)
+//                            Log.i(TAG, "current pixel: $currentPixel // $targetColor")
+//                            x--
+//                            Log.i(TAG, "current pixel 2: $currentPixel // $targetColor")
+//                        } while (currentPixel == targetColor && x > 0 && y > 0)
 
                     }
                     TEXT -> {
@@ -175,10 +192,10 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
             MotionEvent.ACTION_MOVE -> {
                 if (currentTool != BACKGROUND) {
                     currentFigure.path?.quadTo(
-                            currentFigure.currentPosition.x,
-                            currentFigure.currentPosition.y,
-                            (current.x + currentFigure.currentPosition.x) / 2,
-                            (current.y + currentFigure.currentPosition.y) / 2
+                        currentFigure.currentPosition.x,
+                        currentFigure.currentPosition.y,
+                        (current.x + currentFigure.currentPosition.x) / 2,
+                        (current.y + currentFigure.currentPosition.y) / 2
                     )
                     currentFigure.currentPosition = current
                 }
@@ -220,7 +237,10 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                 CIRCLE -> {
                     val cx = figure.originPosition.x
                     val cy = figure.originPosition.y
-                    val radius = Math.max(Math.abs(figure.currentPosition.x - figure.originPosition.x), Math.abs(figure.currentPosition.y - figure.originPosition.y))
+                    val radius = Math.max(
+                        Math.abs(figure.currentPosition.x - figure.originPosition.x),
+                        Math.abs(figure.currentPosition.y - figure.originPosition.y)
+                    )
                     canvas.drawCircle(cx, cy, radius, figure.prefs)
                 }
                 ELLIPSE -> {
@@ -230,7 +250,13 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                     canvas.drawRect(left, top, right, bottom, figure.prefs)
                 }
                 LINE -> {
-                    canvas.drawLine(figure.originPosition.x, figure.originPosition.y, figure.currentPosition.x, figure.currentPosition.y, figure.prefs)
+                    canvas.drawLine(
+                        figure.originPosition.x,
+                        figure.originPosition.y,
+                        figure.currentPosition.x,
+                        figure.currentPosition.y,
+                        figure.prefs
+                    )
                 }
                 BACKGROUND -> {
                 }
@@ -278,7 +304,11 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
 
             this.drawToBitmap().compress(Bitmap.CompressFormat.JPEG, 95, out)
 
-            Toast.makeText(context, "Рисунок ${SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Date())} сохранён в ${Environment.getExternalStorageDirectory()}/Pictures", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                context,
+                "Рисунок ${SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Date())} сохранён в ${Environment.getExternalStorageDirectory()}/Pictures",
+                Toast.LENGTH_LONG
+            ).show()
             true
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
