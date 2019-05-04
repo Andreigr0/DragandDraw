@@ -36,6 +36,7 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
     var backgroundBitmap: Bitmap? = null
 
     companion object {
+        // Commit some more changes by Vlad
         const val BRUSH = 0
         const val ERASER = 1
         const val CIRCLE = 2
