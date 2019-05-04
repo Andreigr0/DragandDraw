@@ -31,6 +31,7 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
         fun checkMenuAfterDrawing()
     }
 
+    // Andrey comment
     private val drawingCallback: DrawingCallback = context as DrawingCallback
 
     companion object {
