@@ -31,6 +31,7 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
     }
 
     // Andrey comment
+    // Commit changes by Vlad
     private val drawingCallback: DrawingCallback = context as DrawingCallback
     var backgroundBitmap: Bitmap? = null
 
