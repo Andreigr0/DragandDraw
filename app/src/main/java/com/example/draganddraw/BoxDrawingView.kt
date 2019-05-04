@@ -30,9 +30,9 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
         fun checkMenuAfterDrawing()
     }
 
-    // Andrey comment
     private val drawingCallback: DrawingCallback = context as DrawingCallback
     var backgroundBitmap: Bitmap? = null
+    // Fetched remote branch added by Vlad and made some changes
 
     companion object {
         const val BRUSH = 0
