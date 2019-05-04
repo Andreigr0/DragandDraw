@@ -30,12 +30,14 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
         fun checkMenuAfterDrawing()
     }
 
+    // Commit changes by Vlad
     private val drawingCallback: DrawingCallback = context as DrawingCallback
     var backgroundBitmap: Bitmap? = null
     // Fetched remote branch added by Vlad and made some changes
     // Commit a little more changes
 
     companion object {
+        // Commit some more changes by Vlad
         const val BRUSH = 0
         const val ERASER = 1
         const val CIRCLE = 2
