@@ -3,6 +3,7 @@ package com.example.draganddraw;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Path;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -27,7 +28,9 @@ public class QueueLinearFloodFiller {
     }
 
     public QueueLinearFloodFiller(Bitmap img, int targetColor, int newColor) {
-        useImage(img);
+//        useImage(img);
+
+        copyImage(img);
 
         setFillColor(newColor);
         setTargetColor(targetColor);
@@ -88,7 +91,7 @@ public class QueueLinearFloodFiller {
 
         pixels = new int[width * height];
 
-        image.getPixels(pixels, 0, width, 1, 1, width - 1, height - 1);
+        image.getPixels(pixels, 0, width, 0, 0, width, height);
     }
 
     protected void prepare() {
@@ -133,23 +136,23 @@ public class QueueLinearFloodFiller {
                 // *Start Fill Upwards
                 // if we're not above the top of the bitmap and the pixel above
                 // this one is within the color tolerance
-                if (range.Y > 0 && (!pixelsChecked[upPxIdx])
-                        && CheckPixel(upPxIdx))
+                if (range.Y > 0 && (!pixelsChecked[upPxIdx]) && CheckPixel(upPxIdx)) {
                     LinearFill(i, upY);
+                }
 
                 // *Start Fill Downwards
                 // if we're not below the bottom of the bitmap and the pixel
                 // below this one is within the color tolerance
-                if (range.Y < (height - 1) && (!pixelsChecked[downPxIdx])
-                        && CheckPixel(downPxIdx))
+                if (range.Y < (height - 1) && (!pixelsChecked[downPxIdx]) && CheckPixel(downPxIdx)) {
                     LinearFill(i, downY);
+                }
 
                 downPxIdx++;
                 upPxIdx++;
             }
         }
 
-        image.setPixels(pixels, 0, width, 1, 1, width - 1, height - 1);
+        image.setPixels(pixels, 0, width, 0, 0, width, height);
     }
 
     // Finds the furthermost left and right boundaries of the fill area

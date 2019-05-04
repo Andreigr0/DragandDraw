@@ -23,6 +23,7 @@ data class Figure(
     val type: Int,
     var prefs: Paint,
     var path: Path? = null,
+    var fill: Bitmap? = null,
     var currentPosition: PointF = originPosition
 )
 
@@ -41,7 +42,7 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
         const val ELLIPSE = 3
         const val RECTANGLE = 4
         const val LINE = 5
-        const val BACKGROUND = 6
+        const val FILL = 6
         const val TEXT = 7
         var currentTool = BRUSH
 
@@ -57,6 +58,7 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
 
         var paintBackgroundColor = Color.WHITE
         val backgroundPaint = Paint()
+        val backgroundMatrix = Matrix()
     }
 
     private val figures = ArrayList<Figure>()
@@ -110,52 +112,12 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                     LINE -> {
                         currentFigure = Figure(current, LINE, paint)
                     }
-                    BACKGROUND -> {
-                        backgroundBitmap = this.drawToBitmap()
-                        figures.clear()
-                        val point = Point()
-                        point.x = event.x.toInt()
-                        point.y = event.y.toInt()
-
-
-//                        doAsync {
-//                            val f = FloodFill()
-//                            f.floodFill(backgroundBitmap, point, backgroundBitmap!!.getPixel(x.toInt(), y.toInt()), Color.argb(brushAlpha, brushRed, brushGreen, brushBlue))
-
-                        val q = QueueLinearFloodFiller(
-                            backgroundBitmap,
-                            backgroundBitmap!!.getPixel(event.x.toInt(), event.y.toInt()),
-                            Color.rgb(brushRed, brushGreen, brushBlue)
-                        )
-                        q.setTolerance(50)
+                    FILL -> {
+                        val currentState = this.drawToBitmap()
+                        val q = QueueLinearFloodFiller(currentState, currentState!!.getPixel(event.x.toInt(), event.y.toInt()), Color.rgb(brushRed, brushGreen, brushBlue))
+                        q.setTolerance(100)
                         q.floodFill(event.x.toInt(), event.y.toInt())
-                        invalidate()
-//                        }
-
-//                        figures.clear()
-//                        val targetColor = Color.argb(0,0,0,0)
-//                        val replacementColor = Color.RED
-//
-//                        var x = current.x.toInt()
-//                        var y = current.y.toInt()
-//                        var currentPixel: Int
-//
-//                        do {
-//                            backgroundBitmap!!.setPixel(x, y, replacementColor)
-//                            backgroundBitmap!!.setPixel(x - 1, y, replacementColor)
-//                            backgroundBitmap!!.setPixel(x + 1, y, replacementColor)
-//                            backgroundBitmap!!.setPixel(x, y - 1, replacementColor)
-//                            backgroundBitmap!!.setPixel(x, y + 1, replacementColor)
-//                            backgroundBitmap!!.setPixel(x + 1, y + 1, replacementColor)
-//                            backgroundBitmap!!.setPixel(x - 1, y + 1, replacementColor)
-//                            backgroundBitmap!!.setPixel(x - 1, y - 1, replacementColor)
-//                            backgroundBitmap!!.setPixel(x + 1, y - 1, replacementColor)
-//                            currentPixel = backgroundBitmap!!.getPixel(x, y)
-//                            Log.i(TAG, "current pixel: $currentPixel // $targetColor")
-//                            x--
-//                            Log.i(TAG, "current pixel 2: $currentPixel // $targetColor")
-//                        } while (currentPixel == targetColor && x > 0 && y > 0)
-
+                        currentFigure = Figure(current, FILL, Paint(), null, q.getImage())
                     }
                     TEXT -> {
                         val textPaint = Paint().apply {
@@ -168,11 +130,11 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                     }
                 }
 
-                if (figures.size < 30 && currentTool != BACKGROUND) {
+                if (figures.size < 30) {
                     figures.add(currentFigure)
                     Log.i(TAG, "Figures (${figures.size})")
 
-                } else if (currentTool != BACKGROUND) {
+                } else {
                     val start = copy.size
                     copy.addAll(figures)
                     figures.clear()
@@ -190,15 +152,13 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                 drawingCallback.checkMenuAfterDrawing()
             }
             MotionEvent.ACTION_MOVE -> {
-                if (currentTool != BACKGROUND) {
-                    currentFigure.path?.quadTo(
-                        currentFigure.currentPosition.x,
-                        currentFigure.currentPosition.y,
-                        (current.x + currentFigure.currentPosition.x) / 2,
-                        (current.y + currentFigure.currentPosition.y) / 2
-                    )
-                    currentFigure.currentPosition = current
-                }
+                currentFigure.path?.quadTo(
+                    currentFigure.currentPosition.x,
+                    currentFigure.currentPosition.y,
+                    (current.x + currentFigure.currentPosition.x) / 2,
+                    (current.y + currentFigure.currentPosition.y) / 2
+                )
+                currentFigure.currentPosition = current
                 invalidate()
             }
             MotionEvent.ACTION_UP -> {
@@ -258,7 +218,8 @@ class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(con
                         figure.prefs
                     )
                 }
-                BACKGROUND -> {
+                FILL -> {
+                    canvas.drawBitmap(figure.fill!!, backgroundMatrix, backgroundPaint)
                 }
                 TEXT -> {
                     canvas.drawText("Текст", figure.currentPosition.x, figure.currentPosition.y, figure.prefs)

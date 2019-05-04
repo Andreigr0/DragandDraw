@@ -1,210 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <com.example.draganddraw.BoxDrawingView
-        android:id="@+id/boxdrawing"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+            android:id="@+id/boxdrawing"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
     <HorizontalScrollView
-        android:id="@+id/horizontalScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
+            android:id="@+id/horizontalScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/button_undo"
-                style="@style/ButtonLinearLayout">
+                    android:id="@+id/button_undo"
+                    style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    android:id="@+id/icon_undo"
-                    style="@style/ButtonLayoutImage"
-                    android:src="@drawable/ic_undo_white_24dp" />
+                        android:id="@+id/icon_undo"
+                        style="@style/ButtonLayoutImage"
+                        android:src="@drawable/ic_undo_white_24dp" />
 
                 <TextView
-                    style="@style/ButtonLayoutTitle"
-                    android:text="@string/undo" />
+                        style="@style/ButtonLayoutTitle"
+                        android:text="@string/undo" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/button_redo"
-                style="@style/ButtonLinearLayout">
+                    android:id="@+id/button_redo"
+                    style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    android:id="@+id/icon_redo"
-                    style="@style/ButtonLayoutImage"
-                    android:src="@drawable/ic_redo_white_24dp" />
+                        android:id="@+id/icon_redo"
+                        style="@style/ButtonLayoutImage"
+                        android:src="@drawable/ic_redo_white_24dp" />
 
                 <TextView
-                    style="@style/ButtonLayoutTitle"
-                    android:text="@string/redo" />
+                        style="@style/ButtonLayoutTitle"
+                        android:text="@string/redo" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/button_new"
-                style="@style/ButtonLinearLayout">
+                    android:id="@+id/button_new"
+                    style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    style="@style/ButtonLayoutImage"
-                    android:src="@drawable/ic_create" />
+                        style="@style/ButtonLayoutImage"
+                        android:src="@drawable/ic_create" />
 
                 <TextView
-                    style="@style/ButtonLayoutTitle"
-                    android:text="@string/create" />
+                        style="@style/ButtonLayoutTitle"
+                        android:text="@string/create" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/button_save"
-                style="@style/ButtonLinearLayout">
+                    android:id="@+id/button_save"
+                    style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    style="@style/ButtonLayoutImage"
-                    android:src="@drawable/ic_save" />
+                        style="@style/ButtonLayoutImage"
+                        android:src="@drawable/ic_save" />
 
                 <TextView
-                    style="@style/ButtonLayoutTitle"
-                    android:text="@string/save" />
+                        style="@style/ButtonLayoutTitle"
+                        android:text="@string/save" />
             </LinearLayout>
 
 
             <LinearLayout
-                android:id="@+id/button_adjust"
-                style="@style/ButtonLinearLayout">
+                    android:id="@+id/button_adjust"
+                    style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    style="@style/ButtonLayoutImage"
-                    android:src="@drawable/ic_adjust" />
+                        style="@style/ButtonLayoutImage"
+                        android:src="@drawable/ic_adjust" />
 
                 <TextView
-                    style="@style/ButtonLayoutTitle"
-                    android:text="@string/adjust" />
+                        style="@style/ButtonLayoutTitle"
+                        android:text="@string/adjust" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/button_brush"
-                style="@style/ButtonLinearLayout">
+                    android:id="@+id/button_brush"
+                    style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    style="@style/ButtonLayoutImage"
-                    android:src="@drawable/ic_brush_black_24dp" />
+                        style="@style/ButtonLayoutImage"
+                        android:src="@drawable/ic_brush_black_24dp" />
 
                 <TextView
-                    style="@style/ButtonLayoutTitle"
-                    android:text="@string/brush" />
+                        style="@style/ButtonLayoutTitle"
+                        android:text="@string/brush" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/button_eraser"
-                style="@style/ButtonLinearLayout">
+                    android:id="@+id/button_eraser"
+                    style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    style="@style/ButtonLayoutImage"
-                    android:src="@drawable/ic_eraser" />
+                        style="@style/ButtonLayoutImage"
+                        android:src="@drawable/ic_eraser" />
 
                 <TextView
-                    style="@style/ButtonLayoutTitle"
-                    android:text="@string/eraser" />
+                        style="@style/ButtonLayoutTitle"
+                        android:text="@string/eraser" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/button_circle"
-                style="@style/ButtonLinearLayout">
+                    android:id="@+id/button_circle"
+                    style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    style="@style/ButtonLayoutImage"
-                    android:src="@drawable/ic_circle" />
+                        style="@style/ButtonLayoutImage"
+                        android:src="@drawable/ic_circle" />
 
                 <TextView
-                    style="@style/ButtonLayoutTitle"
-                    android:text="@string/circle" />
+                        style="@style/ButtonLayoutTitle"
+                        android:text="@string/circle" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/button_ellipse"
-                style="@style/ButtonLinearLayout">
+                    android:id="@+id/button_ellipse"
+                    style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    style="@style/ButtonLayoutImage"
-                    android:src="@drawable/ic_ellipse" />
+                        style="@style/ButtonLayoutImage"
+                        android:src="@drawable/ic_ellipse" />
 
                 <TextView
-                    style="@style/ButtonLayoutTitle"
-                    android:text="@string/ellipse" />
+                        style="@style/ButtonLayoutTitle"
+                        android:text="@string/ellipse" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/button_rectangle"
-                style="@style/ButtonLinearLayout">
+                    android:id="@+id/button_rectangle"
+                    style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    style="@style/ButtonLayoutImage"
-                    android:src="@drawable/ic_rectangle" />
+                        style="@style/ButtonLayoutImage"
+                        android:src="@drawable/ic_rectangle" />
 
                 <TextView
-                    style="@style/ButtonLayoutTitle"
-                    android:text="@string/rectangle" />
+                        style="@style/ButtonLayoutTitle"
+                        android:text="@string/rectangle" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/button_line"
-                style="@style/ButtonLinearLayout">
+                    android:id="@+id/button_line"
+                    style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    style="@style/ButtonLayoutImage"
-                    android:src="@drawable/ic_line" />
+                        style="@style/ButtonLayoutImage"
+                        android:src="@drawable/ic_line" />
 
                 <TextView
-                    style="@style/ButtonLayoutTitle"
-                    android:text="@string/line" />
+                        style="@style/ButtonLayoutTitle"
+                        android:text="@string/line" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/button_text"
-                style="@style/ButtonLinearLayout">
+                    android:id="@+id/button_text"
+                    style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    style="@style/ButtonLayoutImage"
-                    android:src="@drawable/ic_text" />
+                        style="@style/ButtonLayoutImage"
+                        android:src="@drawable/ic_text" />
 
                 <TextView
-                    style="@style/ButtonLayoutTitle"
-                    android:text="@string/text" />
+                        style="@style/ButtonLayoutTitle"
+                        android:text="@string/text" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/button_size"
-                style="@style/ButtonLinearLayout">
+                    android:id="@+id/button_size"
+                    style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    style="@style/ButtonLayoutImage"
-                    android:src="@drawable/ic_size" />
+                        style="@style/ButtonLayoutImage"
+                        android:src="@drawable/ic_size" />
 
                 <TextView
-                    style="@style/ButtonLayoutTitle"
-                    android:text="@string/size" />
+                        style="@style/ButtonLayoutTitle"
+                        android:text="@string/size" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/button_background"
-                style="@style/ButtonLinearLayout">
+                    android:id="@+id/button_fill"
+                    style="@style/ButtonLinearLayout">
 
                 <ImageView
-                    style="@style/ButtonLayoutImage"
-                    android:src="@drawable/ic_picture" />
+                        style="@style/ButtonLayoutImage"
+                        android:src="@drawable/ic_picture" />
 
                 <TextView
-                    style="@style/ButtonLayoutTitle"
-                    android:text="@string/background" />
+                        style="@style/ButtonLayoutTitle"
+                        android:text="@string/fill" />
             </LinearLayout>
 
         </LinearLayout>

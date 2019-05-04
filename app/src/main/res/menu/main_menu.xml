@@ -40,7 +40,7 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/background"
-        android:title="@string/background" />
+        android:title="@string/fill" />
     <item
         android:id="@+id/text"
         android:title="@string/text" />

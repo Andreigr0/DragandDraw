@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Рисовалка</string>
+    <string name="app_name">Drag\'n\'Draw</string>
     <string name="brush">Кисть</string>
     <string name="eraser">Ластик</string>
     <string name="circle">Круг</string>
@@ -7,7 +7,7 @@
     <string name="line">Линия</string>
     <string name="ellipse">Эллипс</string>
     <string name="text">Текст</string>
-    <string name="background">Открыть</string>
+    <string name="fill">Заливка</string>
     <string name="undo">Отменить</string>
     <string name="redo">Вернуть</string>
     <string name="save">Сохранить</string>

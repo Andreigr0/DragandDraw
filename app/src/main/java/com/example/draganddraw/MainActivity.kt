@@ -2,14 +2,12 @@ package com.example.draganddraw
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.drawToBitmap
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.backgroundColorResource
 import org.jetbrains.anko.sdk27.coroutines.onClick
@@ -27,13 +25,13 @@ class MainActivity : AppCompatActivity(), BoxDrawingView.DrawingCallback {
         setContentView(R.layout.activity_main)
 
         tools = arrayListOf(
-                button_brush,
-                button_eraser,
-                button_circle,
-                button_ellipse,
-                button_rectangle,
-                button_line,
-                button_text
+            button_brush,
+            button_eraser,
+            button_circle,
+            button_ellipse,
+            button_rectangle,
+            button_line,
+            button_text
         )
 
         selectCurrentTool(button_brush)
@@ -116,12 +114,12 @@ class MainActivity : AppCompatActivity(), BoxDrawingView.DrawingCallback {
         }
 
         // disabled
-        button_background.onClick {
+        button_fill.onClick {
             //            toast("Выбор фона")
 //            val bitmap: Bitmap = BitmapFactory.decodeStream(assets.open("image.jpg"))
 
 //            selectCurrentTool(button_background)
-            BoxDrawingView.currentTool = BoxDrawingView.BACKGROUND
+            BoxDrawingView.currentTool = BoxDrawingView.FILL
         }
 
         // hide from layout
