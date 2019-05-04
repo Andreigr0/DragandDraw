@@ -23,6 +23,7 @@ data class Figure(
         val originPosition: PointF, val type: Int, var prefs: Paint, var path: Path? = null, var currentPosition: PointF = originPosition
 )
 
+// Vlad
 
 class BoxDrawingView(context: Context, attrSet: AttributeSet? = null) : View(context, attrSet) {
     interface DrawingCallback {
