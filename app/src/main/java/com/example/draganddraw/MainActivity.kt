@@ -2,22 +2,21 @@ package com.example.draganddraw
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.drawToBitmap
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.backgroundColorResource
 import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.toast
 
 
-class MainActivity : AppCompatActivity(), BoxDrawingView.DrawingCallback, BottomMenu.BottomMenuCallback {
+class MainActivity : AppCompatActivity(), BoxDrawingView.DrawingCallback {
     private val disabledAlpha = 100
     private val enabledAlpha = 255
 
@@ -28,13 +27,13 @@ class MainActivity : AppCompatActivity(), BoxDrawingView.DrawingCallback, Bottom
         setContentView(R.layout.activity_main)
 
         tools = arrayListOf(
-            button_brush,
-            button_eraser,
-            button_circle,
-            button_ellipse,
-            button_rectangle,
-            button_line,
-            button_text
+                button_brush,
+                button_eraser,
+                button_circle,
+                button_ellipse,
+                button_rectangle,
+                button_line,
+                button_text
         )
 
         selectCurrentTool(button_brush)
@@ -118,16 +117,16 @@ class MainActivity : AppCompatActivity(), BoxDrawingView.DrawingCallback, Bottom
 
         // disabled
         button_background.onClick {
-            toast("Выбор фона")
-            val bitmap: Bitmap = BitmapFactory.decodeStream(assets.open("image.jpg"))
+            //            toast("Выбор фона")
+//            val bitmap: Bitmap = BitmapFactory.decodeStream(assets.open("image.jpg"))
 
-            Log.i(TAG, "$bitmap")
-            boxdrawing.setBackground(bitmap)
+//            selectCurrentTool(button_background)
+            BoxDrawingView.currentTool = BoxDrawingView.BACKGROUND
         }
 
         // hide from layout
         button_text.visibility = View.GONE
-        button_background.visibility = View.GONE
+//        button_background.visibility = View.GONE
         button_size.visibility = View.GONE
 
         button_text.onClick {
@@ -138,26 +137,12 @@ class MainActivity : AppCompatActivity(), BoxDrawingView.DrawingCallback, Bottom
 
     }
 
+
     private fun selectCurrentTool(view: View) {
         for (i in tools) {
             i.backgroundColorResource = R.color.colorPrimary
         }
         view.backgroundColorResource = R.color.colorPrimaryDark
-    }
-
-    override fun adjustBrushSize(value: Int) {
-        boxdrawing.brushSize = value.toFloat()
-    }
-
-    override fun adjustEraser(value: Int) {
-        boxdrawing.eraserSize = value.toFloat()
-    }
-
-    override fun adjustColor(alpha: Int, red: Int, green: Int, blue: Int) {
-        boxdrawing.alpha = alpha
-        boxdrawing.red = red
-        boxdrawing.green = green
-        boxdrawing.blue = blue
     }
 
     override fun checkMenuAfterDrawing() {
