@@ -169,38 +169,12 @@
             </LinearLayout>
 
             <LinearLayout
-                    android:id="@+id/button_text"
-                    style="@style/ButtonLinearLayout">
-
-                <ImageView
-                        style="@style/ButtonLayoutImage"
-                        android:src="@drawable/ic_text" />
-
-                <TextView
-                        style="@style/ButtonLayoutTitle"
-                        android:text="@string/text" />
-            </LinearLayout>
-
-            <LinearLayout
-                    android:id="@+id/button_size"
-                    style="@style/ButtonLinearLayout">
-
-                <ImageView
-                        style="@style/ButtonLayoutImage"
-                        android:src="@drawable/ic_size" />
-
-                <TextView
-                        style="@style/ButtonLayoutTitle"
-                        android:text="@string/size" />
-            </LinearLayout>
-
-            <LinearLayout
                     android:id="@+id/button_fill"
                     style="@style/ButtonLinearLayout">
 
                 <ImageView
                         style="@style/ButtonLayoutImage"
-                        android:src="@drawable/ic_picture" />
+                        android:src="@drawable/ic_paint_bucket" />
 
                 <TextView
                         style="@style/ButtonLayoutTitle"

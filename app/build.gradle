@@ -39,13 +39,8 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
 
+    implementation 'com.github.yukuku:ambilwarna:2.0.1'
+
     implementation "org.jetbrains.anko:anko:0.10.8" // https://github.com/Kotlin/anko
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.6'
-    // https://github.com/ReactiveX/RxJava
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
-    // https://github.com/ReactiveX/RxAndroid/
-    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
-    // https://github.com/ReactiveX/RxKotlin
-    implementation 'com.jakewharton.rxbinding2:rxbinding:2.2.0'
 
 }

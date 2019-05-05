@@ -11,7 +11,6 @@ import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.backgroundColorResource
 import org.jetbrains.anko.sdk27.coroutines.onClick
-import org.jetbrains.anko.toast
 
 
 class MainActivity : AppCompatActivity(), BoxDrawingView.DrawingCallback {
@@ -31,7 +30,7 @@ class MainActivity : AppCompatActivity(), BoxDrawingView.DrawingCallback {
             button_ellipse,
             button_rectangle,
             button_line,
-            button_text
+            button_fill
         )
 
         selectCurrentTool(button_brush)
@@ -42,7 +41,7 @@ class MainActivity : AppCompatActivity(), BoxDrawingView.DrawingCallback {
                 if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
                     boxdrawing.saveFile()
             } else {
-                Toast.makeText(this@MainActivity, "Mmm", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Что-то пошло не так", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -113,28 +112,11 @@ class MainActivity : AppCompatActivity(), BoxDrawingView.DrawingCallback {
             BoxDrawingView.currentTool = BoxDrawingView.LINE
         }
 
-        // disabled
         button_fill.onClick {
-            //            toast("Выбор фона")
-//            val bitmap: Bitmap = BitmapFactory.decodeStream(assets.open("image.jpg"))
-
-//            selectCurrentTool(button_background)
+            selectCurrentTool(button_fill)
             BoxDrawingView.currentTool = BoxDrawingView.FILL
         }
-
-        // hide from layout
-        button_text.visibility = View.GONE
-//        button_background.visibility = View.GONE
-        button_size.visibility = View.GONE
-
-        button_text.onClick {
-            selectCurrentTool(button_text)
-            BoxDrawingView.currentTool = BoxDrawingView.TEXT
-        }
-        button_size.onClick { toast("Изменить размер изображения") }
-
     }
-
 
     private fun selectCurrentTool(view: View) {
         for (i in tools) {

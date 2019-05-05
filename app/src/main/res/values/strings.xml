@@ -1,23 +1,26 @@
 <resources>
-    <string name="app_name">Drag\'n\'Draw</string>
-    <string name="brush">Кисть</string>
-    <string name="eraser">Ластик</string>
-    <string name="circle">Круг</string>
-    <string name="rectangle">Прямоугольник</string>
-    <string name="line">Линия</string>
-    <string name="ellipse">Эллипс</string>
-    <string name="text">Текст</string>
-    <string name="fill">Заливка</string>
-    <string name="undo">Отменить</string>
-    <string name="redo">Вернуть</string>
-    <string name="save">Сохранить</string>
-    <string name="size">Изменить размер</string>
-    <string name="adjust">Настройки кисти</string>
-    <string name="brush_size">Размер кисти</string>
-    <string name="red">Красный</string>
-    <string name="alpha">Прозрачность</string>
-    <string name="blue">Синий</string>
-    <string name="green">Зелёный</string>
-    <string name="eraser_size">Размер ластика</string>
-    <string name="create">Новое</string>
+    <string name="app_name" translatable="false">Drag\'n\'Draw</string>
+    <string name="brush">Brush</string>
+    <string name="eraser">Eraser</string>
+    <string name="circle">Circle</string>
+    <string name="rectangle">Rectangle</string>
+    <string name="line">Line</string>
+    <string name="ellipse">Ellipse</string>
+    <string name="fill">Fill</string>
+    <string name="undo">Undo</string>
+    <string name="redo">Redo</string>
+    <string name="save">Save</string>
+    <string name="adjust">Adjust brush</string>
+    <string name="brush_size">Brush size</string>
+    <string name="red">Red</string>
+    <string name="alpha">Transparency</string>
+    <string name="blue">Blue</string>
+    <string name="green">Green</string>
+    <string name="eraser_size">Eraser size</string>
+    <string name="create">New</string>
+    <string name="choose_color">Choose color</string>
+    <string name="date_format">MM-dd-yyyy H:mm:ss a</string>
+    <string name="picture_name">Picture %s</string>
+    <string name="save_result">%s saved in %s"</string>
+    <string name="save_error">Error: %s</string>
 </resources>

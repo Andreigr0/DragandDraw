@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="adjust">Настройки кисти</string>
+    <string name="alpha">Прозрачность</string>
+    <string name="blue">Синий</string>
+    <string name="brush">Кисть</string>
+    <string name="brush_size">Размер кисти</string>
+    <string name="circle">Круг</string>
+    <string name="create">Новое</string>
+    <string name="ellipse">Эллипс</string>
+    <string name="eraser">Ластик</string>
+    <string name="eraser_size">Размер ластика</string>
+    <string name="fill">Заливка</string>
+    <string name="green">Зелёный</string>
+    <string name="line">Линия</string>
+    <string name="rectangle">Прямоугольник</string>
+    <string name="red">Красный</string>
+    <string name="redo">Вернуть</string>
+    <string name="save">Сохранить</string>
+    <string name="undo">Отменить</string>
+    <string name="choose_color">Выбор цвета</string>
+    <string name="date_format">dd-MM-yyyy HH:mm:ss</string>
+    <string name="picture_name">Рисунок %s</string>
+    <string name="save_result">%s сохранен в %s</string>
+    <string name="save_error">Ошибка: %s</string>
+</resources>

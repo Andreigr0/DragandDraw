@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_weight="1"
-            android:text="Выбор цвета"
+            android:text="@string/choose_color"
             android:textStyle="bold" />
 
         <ImageView
@@ -59,6 +59,7 @@
             android:layout_width="@dimen/bottomMenuPreview"
             android:layout_height="@dimen/bottomMenuPreview"
             android:src="#FFFF0000" />
+
     </LinearLayout>
 
     <LinearLayout
